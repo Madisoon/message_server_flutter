@@ -22,7 +22,6 @@ class SystemSettingPageState extends State<SystemSettingPage> {
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           title: new Text('设置'),
-          backgroundColor: Color(0xFF7a77bd),
           actions: <Widget>[],
         ),
         body: Container(

@@ -21,7 +21,6 @@ class AboutUsPageState extends State<AboutUsPage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: new Text('关于我们'),
-        backgroundColor: Color(0xFF7a77bd),
       ),
       body: new Text('关于我们'),
     );

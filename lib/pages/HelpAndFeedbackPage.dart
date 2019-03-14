@@ -21,7 +21,6 @@ class HelpAndFeedbackPageState extends State<HelpAndFeedbackPage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: new Text('帮助与反馈'),
-        backgroundColor: Color(0xFF7a77bd),
       ),
       body: new Text('帮助与反馈'),
     );

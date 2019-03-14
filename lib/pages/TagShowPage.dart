@@ -320,7 +320,6 @@ class TagShowPageState extends State<TagShowPage> {
     return Scaffold(
         appBar: new AppBar(
           title: new Text('选择标签'),
-          backgroundColor: Color(0xFF00c1d0),
           iconTheme: new IconThemeData(color: Colors.white),
           actions: <Widget>[
             IconButton(

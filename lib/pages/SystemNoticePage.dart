@@ -85,7 +85,6 @@ class SystemNoticePageState extends State<SystemNoticePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: new Text('系统通知'),
-        backgroundColor: Color(0xFF7a77bd),
       ),
       body: ListView(
         children: <Widget>[

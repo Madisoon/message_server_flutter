@@ -156,7 +156,6 @@ class MonitorInformationDetailPageState
     return Scaffold(
       appBar: new AppBar(
         title: new Text('详情'),
-        backgroundColor: Color(0xFF00c1d0),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_outline),

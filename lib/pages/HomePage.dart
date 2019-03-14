@@ -214,24 +214,6 @@ class _HomePageState extends State<HomePage> {
       index: tabIndex,
     );
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: new Text(CommonConstant.APP_BAR_TITLE[tabIndex]),
-          backgroundColor: Color(0xFF7a77bd),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search, color: Colors.white),
-              tooltip: '过滤',
-              onPressed: () {
-                Navigator.push<String>(context,
-                    new MaterialPageRoute(builder: (BuildContext context) {
-                  return new SearchManager();
-                })).then((String id) {});
-              },
-            ),
-          ],
-        ),
         floatingActionButton: new FloatingActionButton(
           backgroundColor: Colors.white,
           elevation: 2.0,
@@ -272,30 +254,6 @@ class _HomePageState extends State<HomePage> {
             shape: CircularNotchedRectangle(),
             color: Colors.white,
           ),
-/*              new CupertinoTabBar(
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  title: Text(CommonConstant.APP_BAR_TITLE[0])),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.business),
-                  title: Text(CommonConstant.APP_BAR_TITLE[1])),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.school),
-                  title: Text(CommonConstant.APP_BAR_TITLE[2])),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.school),
-                  title: Text(CommonConstant.APP_BAR_TITLE[3])),
-            ],
-            currentIndex: tabIndex,
-            activeColor: Color(0xFF7a77bd),
-            backgroundColor: Colors.white,
-            onTap: (index) {
-              setState(() {
-                tabIndex = index;
-              });
-            },
-          ),*/
         ));
   }
 }

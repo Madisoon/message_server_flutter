@@ -23,7 +23,6 @@ class InformationPageState extends State<InformationPage>
     return Scaffold(
       appBar: new AppBar(
         title: new Text('详情'),
-        backgroundColor: Color(0xFF00c1d0),
         bottom: TabBar(
             //生成Tab菜单
             controller: _tabController,

@@ -66,7 +66,6 @@ class InformationStatisticsPageState extends State<InformationStatisticsPage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: new Text('统计'),
-        backgroundColor: Color(0xFF7a77bd),
         actions: <Widget>[
           PopupMenuButton<String>(
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
