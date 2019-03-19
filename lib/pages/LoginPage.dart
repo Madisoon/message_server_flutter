@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import './HomePage.dart';
 import '../utils/ApiUtils.dart';
 import '../utils/CommonDataUtils.dart';
@@ -25,20 +24,15 @@ class LoginPageState extends State<LoginPage> {
 
   userLoginMethod(BuildContext context) async {
     Map<String, String> map = {};
-    map['userAccount'] = userAccount;
-    map['userPassword'] = userPassword;
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString("account", "123");
-    Navigator.pushAndRemoveUntil(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new HomePage(title: 'TO YOU')),
-        (Route<dynamic> rout) => false);
-/*    ApiUtils.post("http://localhost:5678/push-you-service/login", params: map)
+    map['user_loginname'] = userAccount;
+    map['user_password'] = userPassword;
+    ApiUtils.post(
+            "http://114.115.253.92:8080/yuqingmanage/manage/getUserAllInfo",
+            params: map)
         .then((rep) {
       Map<String, dynamic> data = json.decode(rep);
-      if (data['status'] == 1) {
-        CommonDataUtils.saveSysUser(data['data']).then((sysUser) {
+      if (data['result'] == 1) {
+        CommonDataUtils.saveSysUser(data['data']['user']).then((sysUser) {
           Navigator.pushAndRemoveUntil(
               context,
               new MaterialPageRoute(
@@ -51,18 +45,17 @@ class LoginPageState extends State<LoginPage> {
           barrierDismissible: false, // user must tap button!
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Rewind and remember'),
+              title: Text('系统通知'),
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
-                    Text('You will never be satisfied.'),
-                    Text('You\’re like me. I’m never satisfied.'),
+                    Text('账号或密码错误，请核对后重新输入'),
                   ],
                 ),
               ),
               actions: <Widget>[
-                FlatButton(
-                  child: Text('Regret'),
+                RaisedButton(
+                  child: Text('知道了'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -72,7 +65,7 @@ class LoginPageState extends State<LoginPage> {
           },
         );
       }
-    });*/
+    });
   }
 
   @override

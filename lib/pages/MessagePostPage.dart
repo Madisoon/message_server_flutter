@@ -15,11 +15,7 @@ class MessagePostPage extends StatefulWidget {
 }
 
 class MessagePostPageState extends State<MessagePostPage>
-    with SingleTickerProviderStateMixin {
-
-  TabController _tabController; //需要定义一个Controller
-  List tabs = ["推送", "监控", "展示", "历史", "回收站"];
-
+    with AutomaticKeepAliveClientMixin {
   var listData = [];
 
   /// 第1页
@@ -41,6 +37,9 @@ class MessagePostPageState extends State<MessagePostPage>
   bool isPerformingRequest = false;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   initState() {
     super.initState();
     _scrollController.addListener(() {
@@ -50,7 +49,6 @@ class MessagePostPageState extends State<MessagePostPage>
       }
     });
     getPostInformation();
-    _tabController = TabController(length: tabs.length, vsync: this);
   }
 
   @override
@@ -78,7 +76,6 @@ class MessagePostPageState extends State<MessagePostPage>
     });
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     print(sharedPreferences.getString("account"));
-    /*Map params = new Map();*/
     ApiUtils.get(
             "http://114.115.253.92:8080/yuqingmanage/manage/getInforPostByGet")
         .then((data) {
@@ -254,16 +251,6 @@ class MessagePostPageState extends State<MessagePostPage>
     Widget page =
         emptyPageStatus ? new Center(child: Text('空空如也')) : buildMessageList();
     return Scaffold(
-      // 这是中间内容
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: new Text('信息'),
-        bottom: TabBar(
-            //生成Tab菜单
-            controller: _tabController,
-            tabs: tabs.map((e) => Tab(text: e)).toList()),
-      ),
       body: new RefreshIndicator(
         child: buildMessageList(),
         color: Color(0xFF7a77bd),

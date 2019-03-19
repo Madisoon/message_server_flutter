@@ -50,8 +50,8 @@ class TransitionPageState extends State<TransitionPage> {
   /// 判断 展示登陆页面还是主页面
   indexOrLoginPage() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getBool("LOG_OUT") != null &&
-        sharedPreferences.getBool("LOG_OUT")) {
+    if (sharedPreferences.getBool("LOGIN_SUCCESS") != null &&
+        sharedPreferences.getBool("LOGIN_SUCCESS")) {
       showPage = new HomePage(title: 'TO YOU');
     } else {
       showPage = new LoginPage();
@@ -65,18 +65,10 @@ class TransitionPageState extends State<TransitionPage> {
     }
   }
 
-/*  void countDown() {
-    // 3秒之后 跳转
-    var duration = new Duration(seconds: 3);
-    new Future.delayed(duration, indexOrLoginPage);
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      /*width: double.infinity,
-      height: double.infinity,*/
       child: new GestureDetector(
         onTap: indexOrLoginPage, //设置页面点击事件
         child: FlareActor("lib/images/flash_screen.flr",

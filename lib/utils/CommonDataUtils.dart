@@ -56,14 +56,16 @@ class CommonDataUtils {
   static Future<SysUser> saveSysUser(Map data) async {
     if (data != null) {
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      num id = data['id'];
-      String account = data['userAccount'];
-      String nickName = data['userNickname'];
-      String phone = data['userPhone'];
-      String email = data['userEmail'];
+//      num id = data['id'];
+      num id = 1;
+      String account = data['user_loginname'];
+      String nickName = data['user_name'];
+      String phone = data['user_phone'];
+      String email = data['user_dep'];
       String birth = data['userBirth'];
-      num sex = data['userSex'];
-      String gmtCreate = data['gmtCreate'];
+//      num sex = data['user_status'];
+      num sex = 1;
+      String gmtCreate = data['user_createtime'];
       preferences
         ..setInt(SP_USER_ID, id)
         ..setString(SP_USER_ACCOUNT, account)
@@ -72,7 +74,8 @@ class CommonDataUtils {
         ..setString(SP_USER_EMAIL, email)
         ..setString(SP_USER_BIRTH, birth)
         ..setInt(SP_USER_SEX, sex)
-        ..setString(SP_USER_GMT_CREATE, gmtCreate);
+        ..setString(SP_USER_GMT_CREATE, gmtCreate)
+        ..setBool("LOGIN_SUCCESS", true);
       SysUser sysUser = new SysUser();
       sysUser
         ..id = id

@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../constants/CommonConstant.dart';
-import './MessagePostPage.dart';
-import './MessageMonitorPage.dart';
 import './InformationPage.dart';
 import './SystemNoticePage.dart';
 import './PersonInformationPage.dart';
 import './SystemSettingPage.dart';
 import './SystemConfigurationPage.dart';
 import './InformationStatisticsPage.dart';
-import '../SearchManager.dart';
 import '../utils/CommonDataUtils.dart';
+import '../utils/Dessert.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -31,19 +29,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // 上次点击时间
+  DateTime _lastPressedAt;
+
   int tabIndex = 0;
   Color color;
   String nickName = "";
-  String email = "";
+  String phone = "";
 
   List<Map> listOperation = CommonConstant.listOperation;
 
   List<Map> mainMenu = CommonConstant.mainMenu;
   var bodyHome;
   var pages = <Widget>[
-    new MessagePostPage(),
-    new MessageMonitorPage(),
     new InformationPage(),
+    new DataTableDemo(),
+    new DataTableDemo(),
     new SystemConfigurationPage()
   ];
 
@@ -53,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     CommonDataUtils.getSysUser().then((sysUser) {
       setState(() {
         nickName = sysUser.nickName;
-        email = sysUser.email;
+        phone = sysUser.phone;
       });
     });
   }
@@ -120,7 +121,7 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
         ),
         accountEmail: new Text(
-          email,
+          phone,
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         currentAccountPicture: new CircleAvatar(
@@ -213,47 +214,59 @@ class _HomePageState extends State<HomePage> {
       children: pages,
       index: tabIndex,
     );
-    return Scaffold(
-        floatingActionButton: new FloatingActionButton(
-          backgroundColor: Colors.white,
-          elevation: 2.0,
-          tooltip: '快捷功能',
-          onPressed: () {},
-          child: new Icon(
-            Icons.gps_fixed,
-            color: Color(0xFF7a77bd),
-          ),
-        ),
-        drawer: new Drawer(
-          child: ListView(
-            padding: const EdgeInsets.only(),
-            children: this.renderPersonOperation(),
-          ),
-        ),
-        body: bodyHome,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: new Container(
-          decoration: new BoxDecoration(
-              //设置子控件背后的装饰
-              borderRadius: new BorderRadius.all(Radius.circular(5.0)), //设置圆角
-              boxShadow: <BoxShadow>[
-                new BoxShadow(
-                  color: Color(0xfff1f1f1), //阴影颜色
-                  blurRadius: 10.0, //阴影大小
-                ),
-              ]),
-          child: BottomAppBar(
-            child: SizedBox(
-              height: 65,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: this.renderMainMenu(),
-              ),
+    return new WillPopScope(
+      child: Scaffold(
+          floatingActionButton: new FloatingActionButton(
+            backgroundColor: Colors.white,
+            elevation: 2.0,
+            tooltip: '快捷功能',
+            onPressed: () {},
+            child: new Icon(
+              Icons.gps_fixed,
+              color: Color(0xFF7a77bd),
             ),
-            shape: CircularNotchedRectangle(),
-            color: Colors.white,
           ),
-        ));
+          drawer: new Drawer(
+            child: ListView(
+              padding: const EdgeInsets.only(),
+              children: this.renderPersonOperation(),
+            ),
+          ),
+          body: bodyHome,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: new Container(
+            decoration: new BoxDecoration(
+                //设置子控件背后的装饰
+                borderRadius: new BorderRadius.all(Radius.circular(5.0)), //设置圆角
+                boxShadow: <BoxShadow>[
+                  new BoxShadow(
+                    color: Color(0xfff1f1f1), //阴影颜色
+                    blurRadius: 10.0, //阴影大小
+                  ),
+                ]),
+            child: BottomAppBar(
+              child: SizedBox(
+                height: 65,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: this.renderMainMenu(),
+                ),
+              ),
+              shape: CircularNotchedRectangle(),
+              color: Colors.white,
+            ),
+          )),
+      onWillPop: () async {
+        if (_lastPressedAt == null ||
+            DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
+          //两次点击间隔超过1秒则重新计时
+          _lastPressedAt = DateTime.now();
+          return false;
+        }
+        return true;
+      },
+    );
   }
 }

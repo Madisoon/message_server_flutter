@@ -11,8 +11,13 @@ class MessageMonitorPage extends StatefulWidget {
   MessageMonitorPageState createState() => MessageMonitorPageState();
 }
 
-class MessageMonitorPageState extends State<MessageMonitorPage> {
+class MessageMonitorPageState extends State<MessageMonitorPage>
+    with AutomaticKeepAliveClientMixin {
   var listData = [];
+
+  /// 为了保存页面状态
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
