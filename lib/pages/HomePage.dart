@@ -226,12 +226,12 @@ class _HomePageState extends State<HomePage> {
               color: Color(0xFF7a77bd),
             ),
           ),
-          drawer: new Drawer(
+          /*drawer: new Drawer(
             child: ListView(
               padding: const EdgeInsets.only(),
               children: this.renderPersonOperation(),
             ),
-          ),
+          ),*/
           body: bodyHome,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,

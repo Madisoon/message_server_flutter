@@ -48,9 +48,10 @@ class DifferentTypeInformationState extends State<DifferentTypeInformation> {
       'isDelete': "0",
       'isStatus': "1",
       'pageNumber': '1',
-      'pageSize': '50',
+      'pageSize': '500',
     };
-    ApiUtils.post("http://localhost:8088/manage/listInformation",
+    ApiUtils.post(
+            "http://114.115.253.92:8080/yuqingmanage/manage/listInformation",
             params: params)
         .then((data) {
       if (data != null) {

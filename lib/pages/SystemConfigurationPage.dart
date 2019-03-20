@@ -244,6 +244,11 @@ class SystemConfigurationPageState extends State<SystemConfigurationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: new Text('配置'),
+      ),
       body: Container(
         padding: EdgeInsets.only(right: 15, left: 15),
         child: ListView(

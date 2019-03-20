@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// 常用常量
 class CommonConstant {
-  static const APP_BAR_TITLE = ['推送', '监控', '信息', '配置'];
+  static const APP_BAR_TITLE = ['信息', '监控', '信息', '配置'];
 
   /// 信息来源常量（名称，值，颜色，图标）
   static final List source = [
@@ -50,21 +50,21 @@ class CommonConstant {
   static final List<Map> mainMenu = [
     {
       'icon': Icons.settings_ethernet,
-      'name': '推送',
+      'name': '信息',
       'flex': 1,
       'color': Colors.white,
       'activeStatus': true
     },
     {
       'icon': Icons.monochrome_photos,
-      'name': '监控',
+      'name': '测试',
       'flex': 2,
       'color': Colors.white,
       'activeStatus': false
     },
     {
       'icon': Icons.message,
-      'name': '信息',
+      'name': '测试',
       'flex': 2,
       'color': Colors.white,
       'activeStatus': false

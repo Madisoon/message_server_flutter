@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../constants/CommonConstant.dart';
+import './SystemNoticePage.dart';
+import './PersonInformationPage.dart';
+import './SystemSettingPage.dart';
+import './InformationStatisticsPage.dart';
+import '../utils/CommonDataUtils.dart';
 import './MessageMonitorPage.dart';
 import './MessagePostPage.dart';
 import './DifferentTypeInformation.dart';
@@ -15,16 +21,121 @@ class InformationPage extends StatefulWidget {
 
 class InformationPageState extends State<InformationPage>
     with SingleTickerProviderStateMixin {
-  List tabs = ["推送", "监控", "展示", "历史", "回收站"];
+  List tabs = [
+    "推送",
+    "监控",
+    "展示" /*, "历史", "回收站"*/
+  ];
+
+  List<Map> listOperation = CommonConstant.listOperation;
+
+  String nickName = "";
+  String phone = "";
 
   @override
   initState() {
     super.initState();
+    CommonDataUtils.getSysUser().then((sysUser) {
+      setState(() {
+        nickName = sysUser.nickName;
+        phone = sysUser.phone;
+      });
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  List<Widget> renderPersonOperation() {
+    List<Widget> list = [];
+    list.add(
+      new UserAccountsDrawerHeader(
+        accountName: new Text(
+          nickName,
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+        ),
+        accountEmail: new Text(
+          phone,
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        currentAccountPicture: new CircleAvatar(
+          backgroundImage: new AssetImage("lib/images/header.jpg"),
+        ),
+        onDetailsPressed: () {
+          Navigator.push<String>(context,
+              new MaterialPageRoute(builder: (BuildContext context) {
+                return new PersonInformationPage();
+              })).then((String id) {});
+        },
+        decoration: new BoxDecoration(color: Color(0xFF7a77bd)
+          /*image: DecorationImage(
+            image: AssetImage("lib/images/person_back.png"),
+            fit: BoxFit.fill,
+          ),*/
+        ),
+      ),
+    );
+    this.listOperation.forEach((item) {
+      if (item['name'] == '统计') {
+        list.add(new Container(
+          height: 6,
+          color: Color(0xfff8f6f2),
+        ));
+      }
+      list.add(new InkWell(
+        onTap: () {
+          /// 需要进行页面的跳转
+          switch (item['name']) {
+            case '设置':
+              Navigator.push<String>(context,
+                  new MaterialPageRoute(builder: (BuildContext context) {
+                    return new SystemSettingPage();
+                  })).then((String id) {});
+              break;
+            case '个人中心':
+              Navigator.push<String>(context,
+                  new MaterialPageRoute(builder: (BuildContext context) {
+                    return new PersonInformationPage();
+                  })).then((String id) {});
+              break;
+            case "通知":
+              Navigator.push<String>(context,
+                  new MaterialPageRoute(builder: (BuildContext context) {
+                    return new SystemNoticePage();
+                  })).then((String id) {});
+              break;
+            case '统计':
+              Navigator.push<String>(context,
+                  new MaterialPageRoute(builder: (BuildContext context) {
+                    return new InformationStatisticsPage();
+                  })).then((String id) {});
+              break;
+            default:
+              break;
+          }
+        },
+        child: new Container(
+          padding: EdgeInsets.only(left: 6, right: 6, top: 10, bottom: 10),
+          child: new Row(
+            children: <Widget>[
+              new Icon(
+                item['icon'],
+                size: 18,
+                color: Color(0xffacacac),
+              ),
+              new Expanded(
+                  child: new Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: new Text(item['name']),
+                  ))
+            ],
+          ),
+        ),
+      ));
+    });
+    return list;
   }
 
   @override
@@ -40,6 +151,12 @@ class InformationPageState extends State<InformationPage>
             bottom: TabBar(
                 //生成Tab菜单
                 tabs: tabs.map((e) => Tab(text: e)).toList()),
+          ),
+          drawer: new Drawer(
+            child: ListView(
+              padding: const EdgeInsets.only(),
+              children: this.renderPersonOperation(),
+            ),
           ),
           body: new TabBarView(
             children: [
