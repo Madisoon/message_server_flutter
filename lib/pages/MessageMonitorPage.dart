@@ -104,7 +104,7 @@ class MessageMonitorPageState extends State<MessageMonitorPage>
           return new MonitorInformationDetailPage(information: map);
         })).then((Map map) {
           /// 页面需要移除的id
-          if (map['id'] != null && map['id'] != '') {
+          if (map != null && map['id'] != null && map['id'] != '') {
             if (map['type'] == 'trash') {
               Scaffold.of(context)
                   .showSnackBar(SnackBar(content: Text('回收成功')));

@@ -19,9 +19,14 @@ class TagShowPageState extends State<TagShowPage> {
   var throwShotAway = false;
   GlobalKey anchorKey = GlobalKey();
 
-  final String tagIndex = 'tagIndex';
+//  final String tagIndex = 'tagIndex';
+//  final String tagId = 'id';
+//  final String tagName = 'tagName';
+//  final String checkStatus = 'checkStatus';
+
+  final String tagIndex = 'name_index';
   final String tagId = 'id';
-  final String tagName = 'tagName';
+  final String tagName = 'name';
   final String checkStatus = 'checkStatus';
 
   ScrollController scrollController;
@@ -29,8 +34,34 @@ class TagShowPageState extends State<TagShowPage> {
   var checkedTag = [];
 
   var allTag = [];
-  var letter = [];
-
+  var letter = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z'
+  ];
   final Map letterPositionMap = {'A': 0};
 
   @override
@@ -40,7 +71,6 @@ class TagShowPageState extends State<TagShowPage> {
 
     /// 计算用于 IndexBar 进行定位的关键通讯录列表项的位置
     getAllTag();
-    listTagIndex();
   }
 
   listTagIndex() {
@@ -66,11 +96,12 @@ class TagShowPageState extends State<TagShowPage> {
 
   /// 获取所有标签
   getAllTag() {
-    ApiUtils.get("http://localhost:5678/push-you-service/tag/listAllTag")
+    ApiUtils.post("http://114.115.253.92:8080/yuqingmanage/manage/getAllTag")
         .then((data) {
       var totalPosition = 0.0;
       setState(() {
-        allTag = json.decode(data);
+        Map<String, dynamic> map = json.decode(data);
+        allTag = map['data'];
         allTag.sort(
             (a, b) => a[tagIndex].toString().compareTo(b[tagIndex].toString()));
         List.generate(allTag.length, (index) {
@@ -233,7 +264,7 @@ class TagShowPageState extends State<TagShowPage> {
     return new GestureDetector(
       onVerticalDragDown: (DragDownDetails details) {
         setState(() {
-          widget.indexBarColor = Colors.black38;
+          widget.indexBarColor = Colors.black26;
           widget.currentLetterShow =
               getLetter(context, tagHeight, details.globalPosition);
           jumpToIndex(widget.currentLetterShow);
@@ -282,12 +313,12 @@ class TagShowPageState extends State<TagShowPage> {
         ),
       ),
       new Positioned(
-        //方法二
         right: 5.0,
         top: 8.0,
         bottom: 40.0,
         width: 16.0,
         child: new Container(
+          padding: EdgeInsets.only(top: 10, bottom: 10),
           child: LayoutBuilder(builder: buildIndexBar),
           decoration: new BoxDecoration(
             color: widget.indexBarColor,
@@ -306,7 +337,7 @@ class TagShowPageState extends State<TagShowPage> {
           width: 110,
           height: 110,
           decoration: BoxDecoration(
-              color: Colors.black45,
+              color: Color(0xFF7a77bd),
               borderRadius: BorderRadius.all(Radius.circular(4.0))),
           child: Center(
             child: new Text(

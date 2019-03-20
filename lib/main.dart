@@ -16,14 +16,14 @@ class MyMessageServerApp extends StatelessWidget {
     ThemeData ios = new ThemeData(
       brightness: Brightness.light,
       primaryColor: Color(0xFF7a77bd),
-      accentColor: Color(0xFFffffff),
+      accentColor: Color(0xFF5fc2ed),
     );
 
     /// android 主题
     ThemeData android = new ThemeData(
       brightness: Brightness.light,
       primaryColor: Color(0xFF7a77bd),
-      accentColor: Color(0xFFffffff),
+      accentColor: Color(0xFF5fc2ed),
     );
 
     return MaterialApp(
