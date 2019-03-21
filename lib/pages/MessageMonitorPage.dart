@@ -106,8 +106,10 @@ class MessageMonitorPageState extends State<MessageMonitorPage>
           /// 页面需要移除的id
           if (map != null && map['id'] != null && map['id'] != '') {
             if (map['type'] == 'trash') {
-              Scaffold.of(context)
-                  .showSnackBar(SnackBar(content: Text('回收成功')));
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text('回收成功', style: TextStyle(color: Colors.white),),
+                backgroundColor: Color(0xFF7a77bd),
+              ));
             }
             setState(() {
               listData.removeWhere((item) => item['id'] == map['id']);
@@ -131,7 +133,12 @@ class MessageMonitorPageState extends State<MessageMonitorPage>
             setState(() {
               listData.removeAt(index);
             });
-            Scaffold.of(context).showSnackBar(SnackBar(content: Text('删除成功')));
+            Scaffold.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.red.shade700,
+                content: Text(
+                  '删除成功',
+                  style: TextStyle(color: Colors.white),
+                )));
           },
           child: new Container(
             child: new Column(

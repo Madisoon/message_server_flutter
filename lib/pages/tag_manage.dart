@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
+
 import 'dart:convert';
 import '../utils/ApiUtils.dart';
 
-@immutable
-class TagShowPage extends StatefulWidget {
-  TagShowPage({Key key, this.checkedTag}) : super(key: key);
-
-  List checkedTag;
-
+// 标签管理的功能
+class TagManage extends StatefulWidget {
+  TagManage({Key key}) : super(key: key);
   Color indexBarColor = Colors.transparent;
 
   String currentLetterShow = '';
 
   @override
-  TagShowPageState createState() => TagShowPageState();
+  TagManageState createState() => TagManageState();
 }
 
-class TagShowPageState extends State<TagShowPage> {
+class TagManageState extends State<TagManage> {
   var throwShotAway = false;
   GlobalKey anchorKey = GlobalKey();
 
@@ -118,16 +116,6 @@ class TagShowPageState extends State<TagShowPage> {
           } else {
             totalPosition += 45;
           }
-          // 默认标签都是未被选中的状态
-          allTag[index][checkStatus] = false;
-
-          //如果id相等，就是已经被选中
-          widget.checkedTag.forEach((item) {
-            if (allTag[index][tagId] == item[tagId]) {
-              allTag[index][checkStatus] = true;
-              return;
-            }
-          });
         });
       });
     });
@@ -183,6 +171,8 @@ class TagShowPageState extends State<TagShowPage> {
             ),
             new Expanded(
                 child: new Container(
+              height: 45,
+              alignment: Alignment.centerLeft,
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
@@ -191,26 +181,9 @@ class TagShowPageState extends State<TagShowPage> {
                   ),
                 ),
               ),
-              child: new Row(
-                children: <Widget>[
-                  new Expanded(
-                    child: new Text(
-                      data[tagName],
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                  new Container(
-                    padding: EdgeInsets.only(right: 14),
-                    child: new Checkbox(
-                        value: data[checkStatus],
-                        activeColor: Color(0xFF7a77bd),
-                        onChanged: (bool newValue) {
-                          setState(() {
-                            data[checkStatus] = newValue;
-                          });
-                        }),
-                  )
-                ],
+              child: new Text(
+                data[tagName],
+                style: TextStyle(fontSize: 15),
               ),
             ))
           ],
@@ -355,11 +328,44 @@ class TagShowPageState extends State<TagShowPage> {
           iconTheme: new IconThemeData(color: Colors.white),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.done, color: Colors.white),
-              tooltip: '确认',
+              icon: Icon(Icons.add, color: Colors.white),
+              tooltip: '添加',
               onPressed: () {
-                /// 返回到之前的页面
-                Navigator.pop(context, checkedTag);
+                return showDialog<void>(
+                  context: context,
+                  barrierDismissible: false, // user must tap button!
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            new TextField(
+                              maxLines: 1,
+                              decoration: InputDecoration(
+                                labelText: '名称',
+                              ),
+                              onChanged: (String value) {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('提交'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                          child: Text('取消'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
             ),
           ],

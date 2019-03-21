@@ -124,7 +124,10 @@ class MessagePostPageState extends State<MessagePostPage>
       setState(() {
         listData.removeAt(index);
       });
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('完成推送')));
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('完成推送', style: TextStyle(color: Colors.white),),
+        backgroundColor: Color(0xFF7a77bd),
+      ));
     });
   }
 
@@ -201,9 +204,10 @@ class MessagePostPageState extends State<MessagePostPage>
               listData.removeWhere((item) => id == item['id']);
             });
             Scaffold.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.red.shade700,
                 content: Text(
               '删除成功',
-              style: TextStyle(color: Colors.redAccent),
+              style: TextStyle(color: Colors.white),
             )));
           }
         });

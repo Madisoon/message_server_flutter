@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './MessagePostPage.dart';
 import './MessageMonitorPage.dart';
-import './TagShowPage.dart';
+import './tag_manage.dart';
 import './SystemNoticePage.dart';
 import './SystemSettingPage.dart';
 import './SystemConfigurationPage.dart';
@@ -24,7 +24,7 @@ class SystemConfigurationPageState extends State<SystemConfigurationPage> {
           'subtitle': '二级标题',
           'color': Color(0xFF4c96f4),
           'icon': Icons.map,
-          'route': new SystemConfigurationPage()
+          'route': new TagManage()
         },
         {
           'name': '个人标签',
@@ -161,22 +161,29 @@ class SystemConfigurationPageState extends State<SystemConfigurationPage> {
       children: <Widget>[
         Stack(
           children: <Widget>[
-            new Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                  color: map['color'],
-                  borderRadius: BorderRadius.all(Radius.circular(6.0))),
-              child: new Center(
-                child: Icon(
-                  map['icon'],
-                  color: Colors.white,
-                  size: 28,
+            new GestureDetector(
+              onTap: () => {
+                    Navigator.push(context,
+                        new MaterialPageRoute(builder: (BuildContext context) {
+                      return map['route'];
+                    }))
+                  },
+              child: new Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                    color: map['color'],
+                    borderRadius: BorderRadius.all(Radius.circular(6.0))),
+                child: new Center(
+                  child: Icon(
+                    map['icon'],
+                    color: Colors.white,
+                    size: 28,
+                  ),
                 ),
               ),
             ),
             new Positioned(
-              //方法二
               bottom: 0,
               child: new Container(
                 width: 48,
