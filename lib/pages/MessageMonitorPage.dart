@@ -83,7 +83,6 @@ class MessageMonitorPageState extends State<MessageMonitorPage>
           ],
         ),
         onHorizontalDragEnd: (endDetails) {
-          print("拖动结束");
         },
       ),
       /*new Text(DateTime.now().toString())*/

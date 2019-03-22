@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../utils/ApiUtils.dart';
 
-// 标签管理的功能
+@immutable
 class TagManage extends StatefulWidget {
   TagManage({Key key}) : super(key: key);
   Color indexBarColor = Colors.transparent;
@@ -15,8 +15,7 @@ class TagManage extends StatefulWidget {
 }
 
 class TagManageState extends State<TagManage> {
-  var throwShotAway = false;
-  GlobalKey anchorKey = GlobalKey();
+  TextEditingController tagNameController;
 
 //  final String tagIndex = 'tagIndex';
 //  final String tagId = 'id';
@@ -29,9 +28,6 @@ class TagManageState extends State<TagManage> {
   final String checkStatus = 'checkStatus';
 
   ScrollController scrollController;
-
-  var checkedTag = [];
-
   var allTag = [];
   var letter = [
     'A',
@@ -67,9 +63,15 @@ class TagManageState extends State<TagManage> {
   void initState() {
     super.initState();
     scrollController = new ScrollController();
-
-    /// 计算用于 IndexBar 进行定位的关键通讯录列表项的位置
+    tagNameController =
+        new TextEditingController.fromValue(new TextEditingValue(text: ''));
     getAllTag();
+  }
+
+  /// 新建标签
+  insertTag() {
+    // 添加完成将对象返回回来
+    tagNameController.text = '';
   }
 
   listTagIndex() {
@@ -146,16 +148,7 @@ class TagManageState extends State<TagManage> {
 
   Widget buildItemTagWidget(var data, bool groupStatus) {
     Widget itemBody = new InkWell(
-      onTap: () {
-        setState(() {
-          data[checkStatus] = !data[checkStatus];
-        });
-        if (data[checkStatus]) {
-          checkedTag.add(data);
-        } else {
-          checkedTag.removeWhere((item) => item[tagId] == data[tagId]);
-        }
-      },
+      onTap: () {},
       child: new Container(
         height: 45,
         child: new Row(
@@ -336,6 +329,7 @@ class TagManageState extends State<TagManage> {
                   barrierDismissible: false, // user must tap button!
                   builder: (BuildContext context) {
                     return AlertDialog(
+                      title: Text('添加标签'),
                       content: SingleChildScrollView(
                         child: ListBody(
                           children: <Widget>[
@@ -351,13 +345,19 @@ class TagManageState extends State<TagManage> {
                       ),
                       actions: <Widget>[
                         FlatButton(
-                          child: Text('提交'),
+                          child: Text(
+                            '取消',
+                            style: TextStyle(color: Color(0xFF00c1d0)),
+                          ),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                         ),
                         FlatButton(
-                          child: Text('取消'),
+                          child: Text(
+                            '提交',
+                            style: TextStyle(color: Color(0xFF7a77bd)),
+                          ),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },

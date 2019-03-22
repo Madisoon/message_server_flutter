@@ -75,7 +75,6 @@ class MessagePostPageState extends State<MessagePostPage>
       emptyPageStatus = false;
     });
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    print(sharedPreferences.getString("account"));
     ApiUtils.get(
             "http://114.115.253.92:8080/yuqingmanage/manage/getInforPostByGet")
         .then((data) {
@@ -125,7 +124,10 @@ class MessagePostPageState extends State<MessagePostPage>
         listData.removeAt(index);
       });
       Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('完成推送', style: TextStyle(color: Colors.white),),
+        content: Text(
+          '完成推送',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Color(0xFF7a77bd),
       ));
     });
@@ -176,9 +178,7 @@ class MessagePostPageState extends State<MessagePostPage>
             )
           ],
         ),
-        onHorizontalDragEnd: (endDetails) {
-          print("拖动结束");
-        },
+        onHorizontalDragEnd: (endDetails) {},
       ),
       /*new Text(DateTime.now().toString())*/
       subtitle: new Row(
@@ -204,11 +204,11 @@ class MessagePostPageState extends State<MessagePostPage>
               listData.removeWhere((item) => id == item['id']);
             });
             Scaffold.of(context).showSnackBar(SnackBar(
-              backgroundColor: Colors.red.shade700,
+                backgroundColor: Colors.red.shade700,
                 content: Text(
-              '删除成功',
-              style: TextStyle(color: Colors.white),
-            )));
+                  '删除成功',
+                  style: TextStyle(color: Colors.white),
+                )));
           }
         });
       },
