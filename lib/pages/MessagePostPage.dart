@@ -48,6 +48,7 @@ class MessagePostPageState extends State<MessagePostPage>
         getMorePostInformation();
       }
     });
+    CommonOperation.appUIStyle();
     getPostInformation();
   }
 

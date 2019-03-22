@@ -1,10 +1,19 @@
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 
 class CommonOperation {
   /// 复制操作
   static copyToClipboard(final String text) {
     if (text == null || text == '') return;
     Clipboard.setData(new ClipboardData(text: text));
+  }
+
+  static SystemUiOverlayStyle uiStyle = const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  );
+
+  static appUIStyle() {
+    SystemChrome.setSystemUIOverlayStyle(uiStyle);
   }
 
   /// 获取信息发送的类型
