@@ -10,6 +10,7 @@ class CommonOperation {
 
   static SystemUiOverlayStyle uiStyle = const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
+    systemNavigationBarColor: Color(0xFF7a77bd),
   );
 
   static appUIStyle() {
