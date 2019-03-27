@@ -52,7 +52,7 @@ class TransitionPageState extends State<TransitionPage> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getBool("LOGIN_SUCCESS") != null &&
         sharedPreferences.getBool("LOGIN_SUCCESS")) {
-      showPage = new HomePage(title: 'TO YOU');
+      showPage = new HomePage(title: '推你');
     } else {
       showPage = new LoginPage();
     }

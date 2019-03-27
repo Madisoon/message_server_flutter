@@ -9,6 +9,8 @@ import './SystemConfigurationPage.dart';
 import './InformationStatisticsPage.dart';
 import '../utils/CommonDataUtils.dart';
 import '../utils/Dessert.dart';
+import 'dart:ui';
+import 'dart:io';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -77,16 +79,17 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   Container(
                     child: Icon(mainMenu[index]['icon'],
+                        size: 22,
                         color: mainMenu[index]['activeStatus']
                             ? Color(0xFF7a77bd)
                             : CupertinoColors.inactiveGray),
-                    margin: const EdgeInsets.only(bottom: 10.0),
                   ),
                   Text(
                     mainMenu[index]['name'],
                     softWrap: false,
                     overflow: TextOverflow.fade,
                     style: TextStyle(
+                        fontSize: 13,
                         color: mainMenu[index]['activeStatus']
                             ? Color(0xFF7a77bd)
                             : CupertinoColors.inactiveGray),
@@ -118,7 +121,7 @@ class _HomePageState extends State<HomePage> {
       new UserAccountsDrawerHeader(
         accountName: new Text(
           nickName,
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+          style: TextStyle(fontWeight: FontWeight.w600),
         ),
         accountEmail: new Text(
           phone,
@@ -226,19 +229,101 @@ class _HomePageState extends State<HomePage> {
               color: Color(0xFF7a77bd),
             ),
           ),
-          /*drawer: new Drawer(
-            child: ListView(
-              padding: const EdgeInsets.only(),
-              children: this.renderPersonOperation(),
+          drawer: new Drawer(
+            child: Stack(
+              children: <Widget>[
+                ListView(
+                  padding: const EdgeInsets.only(),
+                  children: this.renderPersonOperation(),
+                ),
+                new Positioned(
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: Platform.isIOS ? 34 : 0),
+                    height: 50,
+                    width: 304,
+                    decoration: BoxDecoration(
+                        border: Border(
+                            top: BorderSide(
+                                color: Color(0xffe8e8e8), width: 1))),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 5,
+                          child: InkWell(
+                            onTap: () => {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.outlined_flag,
+                                  size: 18,
+                                  color: Color(0xffacacac),
+                                ),
+                                new Container(
+                                  margin: EdgeInsets.only(left: 5),
+                                  child: new Text('夜间模式'),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: InkWell(
+                            onTap: () => {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.settings,
+                                  size: 18,
+                                  color: Color(0xffacacac),
+                                ),
+                                new Container(
+                                  margin: EdgeInsets.only(left: 5),
+                                  child: new Text('设置'),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: InkWell(
+                            onTap: () => {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.fingerprint,
+                                  size: 18,
+                                  color: Color(0xffacacac),
+                                ),
+                                new Container(
+                                  margin: EdgeInsets.only(left: 5),
+                                  child: new Text('退出'),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  bottom: 0,
+                )
+              ],
             ),
-          ),*/
+          ),
           body: bodyHome,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: new Container(
             decoration: new BoxDecoration(
                 //设置子控件背后的装饰
-                borderRadius: new BorderRadius.all(Radius.circular(5.0)), //设置圆角
                 boxShadow: <BoxShadow>[
                   new BoxShadow(
                     color: Color(0xfff1f1f1), //阴影颜色
@@ -247,7 +332,7 @@ class _HomePageState extends State<HomePage> {
                 ]),
             child: BottomAppBar(
               child: SizedBox(
-                height: 65,
+                height: 55,
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

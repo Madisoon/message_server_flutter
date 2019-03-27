@@ -66,15 +66,15 @@ class InformationPageState extends State<InformationPage>
         onDetailsPressed: () {
           Navigator.push<String>(context,
               new MaterialPageRoute(builder: (BuildContext context) {
-                return new PersonInformationPage();
-              })).then((String id) {});
+            return new PersonInformationPage();
+          })).then((String id) {});
         },
         decoration: new BoxDecoration(color: Color(0xFF7a77bd)
-          /*image: DecorationImage(
+            /*image: DecorationImage(
             image: AssetImage("lib/images/person_back.png"),
             fit: BoxFit.fill,
           ),*/
-        ),
+            ),
       ),
     );
     this.listOperation.forEach((item) {
@@ -91,26 +91,26 @@ class InformationPageState extends State<InformationPage>
             case '设置':
               Navigator.push<String>(context,
                   new MaterialPageRoute(builder: (BuildContext context) {
-                    return new SystemSettingPage();
-                  })).then((String id) {});
+                return new SystemSettingPage();
+              })).then((String id) {});
               break;
             case '个人中心':
               Navigator.push<String>(context,
                   new MaterialPageRoute(builder: (BuildContext context) {
-                    return new PersonInformationPage();
-                  })).then((String id) {});
+                return new PersonInformationPage();
+              })).then((String id) {});
               break;
             case "通知":
               Navigator.push<String>(context,
                   new MaterialPageRoute(builder: (BuildContext context) {
-                    return new SystemNoticePage();
-                  })).then((String id) {});
+                return new SystemNoticePage();
+              })).then((String id) {});
               break;
             case '统计':
               Navigator.push<String>(context,
                   new MaterialPageRoute(builder: (BuildContext context) {
-                    return new InformationStatisticsPage();
-                  })).then((String id) {});
+                return new InformationStatisticsPage();
+              })).then((String id) {});
               break;
             default:
               break;
@@ -127,9 +127,9 @@ class InformationPageState extends State<InformationPage>
               ),
               new Expanded(
                   child: new Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: new Text(item['name']),
-                  ))
+                margin: EdgeInsets.only(left: 10),
+                child: new Text(item['name']),
+              ))
             ],
           ),
         ),
@@ -148,9 +148,17 @@ class InformationPageState extends State<InformationPage>
             // Here we take the value from the MyHomePage object that was created by
             // the App.build method, and use it to set our appbar title.
             title: new Text('信息管理'),
-            bottom: TabBar(
-                //生成Tab菜单
-                tabs: tabs.map((e) => Tab(text: e)).toList()),
+            bottom: new PreferredSize(
+              preferredSize: Size.fromHeight(28.0),
+              child: TabBar(
+                  //生成Tab菜单
+                  tabs: tabs
+                      .map((e) => new Container(
+                            height: 38,
+                            child: Tab(text: e),
+                          ))
+                      .toList()),
+            ),
           ),
           drawer: new Drawer(
             child: ListView(
@@ -163,8 +171,6 @@ class InformationPageState extends State<InformationPage>
               MessagePostPage(),
               MessageMonitorPage(),
               DifferentTypeInformation(),
-              MessageMonitorPage(),
-              MessagePostPage()
             ],
           ),
         ));
