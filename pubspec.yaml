@@ -24,6 +24,7 @@ dependencies:
   flare_flutter: ^1.2.3
   nima: ^1.0.2
   fluwx: ^0.6.0
+  event_bus: ^1.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

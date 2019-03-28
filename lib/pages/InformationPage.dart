@@ -9,6 +9,8 @@ import '../utils/CommonDataUtils.dart';
 import './MessageMonitorPage.dart';
 import './MessagePostPage.dart';
 import './DifferentTypeInformation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/theme_event.dart';
 
 class InformationPage extends StatefulWidget {
   InformationPage({Key key, this.title}) : super(key: key);
@@ -35,12 +37,19 @@ class InformationPageState extends State<InformationPage>
   @override
   initState() {
     super.initState();
+    this.changeTheme();
     CommonDataUtils.getSysUser().then((sysUser) {
       setState(() {
         nickName = sysUser.nickName;
         phone = sysUser.phone;
       });
     });
+  }
+
+  changeTheme() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setInt("themeIndex", 3);
+    CommonConstant.eventBus.fire(new ThemeEvent(3));
   }
 
   @override

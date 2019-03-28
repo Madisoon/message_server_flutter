@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:event_bus/event_bus.dart';
 
 /// 常用常量
 class CommonConstant {
+  static EventBus eventBus = new EventBus();
+
   static const APP_BAR_TITLE = ['信息', '监控', '信息', '配置'];
 
   /// 信息来源常量（名称，值，颜色，图标）
