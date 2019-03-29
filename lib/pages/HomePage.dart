@@ -5,6 +5,7 @@ import './InformationPage.dart';
 import './SystemNoticePage.dart';
 import './PersonInformationPage.dart';
 import './SystemSettingPage.dart';
+import './theme_change_page.dart';
 import './SystemConfigurationPage.dart';
 import './InformationStatisticsPage.dart';
 import '../utils/CommonDataUtils.dart';
@@ -155,6 +156,12 @@ class _HomePageState extends State<HomePage> {
         onTap: () {
           /// 需要进行页面的跳转
           switch (item['name']) {
+            case '个性皮肤':
+              Navigator.push<String>(context,
+                  new MaterialPageRoute(builder: (BuildContext context) {
+                return new ThemeChangePage();
+              })).then((String id) {});
+              break;
             case '设置':
               Navigator.push<String>(context,
                   new MaterialPageRoute(builder: (BuildContext context) {

@@ -43,10 +43,31 @@ class CommonConstant {
 
   /// 我的里面相关功能
   static final List<Map> listOperation = [
-    {'icon': Icons.person, 'name': '个人中心', 'color': Colors.white},
-    {'icon': Icons.settings, 'name': '设置', 'color': Colors.white},
-    {'icon': Icons.insert_chart, 'name': '统计', 'color': Colors.white},
-    {'icon': Icons.message, 'name': '通知', 'color': Colors.white}
+    {
+      'icon': Icons.person,
+      'name': '个人中心',
+      'color': Colors.white,
+      'callBack': ''
+    },
+    {
+      'icon': Icons.palette,
+      'name': '个性皮肤',
+      'color': Colors.white,
+      'callBack': ''
+    },
+    {
+      'icon': Icons.settings,
+      'name': '设置',
+      'color': Colors.white,
+      'callBack': ''
+    },
+    {
+      'icon': Icons.insert_chart,
+      'name': '统计',
+      'color': Colors.white,
+      'callBack': ''
+    },
+    {'icon': Icons.message, 'name': '通知', 'color': Colors.white, 'callBack': ''}
   ];
 
   /// 主菜单相关的功能
