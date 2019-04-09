@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                     child: Icon(mainMenu[index]['icon'],
                         size: 22,
                         color: mainMenu[index]['activeStatus']
-                            ? Color(0xFF7a77bd)
+                            ? Theme.of(context).primaryColor
                             : CupertinoColors.inactiveGray),
                   ),
                   Text(
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                         fontSize: 13,
                         color: mainMenu[index]['activeStatus']
-                            ? Color(0xFF7a77bd)
+                            ? Theme.of(context).primaryColor
                             : CupertinoColors.inactiveGray),
                   )
                 ],
@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
             return new PersonInformationPage();
           })).then((String id) {});
         },
-        decoration: new BoxDecoration(color: Color(0xFFffffff)),
+        decoration: new BoxDecoration(color: Theme.of(context).primaryColor),
       ),
     );
     this.listOperation.forEach((item) {
@@ -228,7 +228,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {},
             child: new Icon(
               Icons.gps_fixed,
-              color: Color(0xFF7a77bd),
+              color: Theme.of(context).primaryColor,
             ),
           ),
           drawer: new Drawer(

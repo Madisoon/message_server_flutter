@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 
 /// 主题颜色的静态变量
 class ThemeConstant {
-  /// 默认主题色
-  static const Color defaultColor = const Color(0xFF7a77bd);
-
   /// 可选的主题色
   static List<Color> supportColors = [
-    Colors.white,
-    defaultColor,
-    Colors.white,
+    Color(0xFF7a77bd),
+    Color(0xFFf8f6f2),
     Colors.purple,
     Colors.orange,
     Colors.deepPurpleAccent,
@@ -20,9 +16,26 @@ class ThemeConstant {
     Colors.lime,
     Colors.indigo,
     Colors.cyan,
-    Colors.teal,
+  ];
+
+  static List<Map> supportColor = [
+    {
+      'name': '',
+      'primaryColor': Color(0xFF7a77bd),
+      'accentColor': Color(0xFF5fc2ed),
+    },
+    {
+      'name': '',
+      'primaryColor': Color(0xFF7a77bd),
+      'accentColor': Color(0xFF5fc2ed),
+    },
+    {
+      'name': '',
+      'primaryColor': Color(0xFF7a77bd),
+      'accentColor': Color(0xFF5fc2ed),
+    },
   ];
 
   // 当前的主题色
-  static Color currentColorTheme = defaultColor;
+  static Color currentColorTheme = supportColors[0];
 }
