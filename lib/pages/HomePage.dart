@@ -137,12 +137,7 @@ class _HomePageState extends State<HomePage> {
             return new PersonInformationPage();
           })).then((String id) {});
         },
-        decoration: new BoxDecoration(color: Color(0xFF7a77bd)
-            /*image: DecorationImage(
-            image: AssetImage("lib/images/person_back.png"),
-            fit: BoxFit.fill,
-          ),*/
-            ),
+        decoration: new BoxDecoration(color: Color(0xFFffffff)),
       ),
     );
     this.listOperation.forEach((item) {

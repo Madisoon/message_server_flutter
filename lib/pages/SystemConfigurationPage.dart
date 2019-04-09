@@ -27,7 +27,7 @@ class SystemConfigurationPageState extends State<SystemConfigurationPage> {
           'route': new TagManage()
         },
         {
-          'name': '个人标签',
+          'name': '我的标签',
           'subtitle': '二级标题',
           'color': Color(0xFFf19850),
           'icon': Icons.add_to_queue,

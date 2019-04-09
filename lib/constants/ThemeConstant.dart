@@ -7,7 +7,9 @@ class ThemeConstant {
 
   /// 可选的主题色
   static List<Color> supportColors = [
+    Colors.white,
     defaultColor,
+    Colors.white,
     Colors.purple,
     Colors.orange,
     Colors.deepPurpleAccent,
@@ -19,7 +21,6 @@ class ThemeConstant {
     Colors.indigo,
     Colors.cyan,
     Colors.teal,
-    Colors.white
   ];
 
   // 当前的主题色

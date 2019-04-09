@@ -29,28 +29,37 @@ class ThemeChangePageState extends State<ThemeChangePage> {
           title: new Text('个性皮肤'),
         ),
         body: Container(
+          padding: EdgeInsets.only(left: 10, right: 10),
           child: new Column(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: 10, left: 10),
+                margin: EdgeInsets.only(top: 10, bottom: 10),
                 alignment: Alignment.topLeft,
                 child: Text(
-                  '推荐',
+                  '推荐皮肤',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
               ),
               Container(
-                height: 600,
+                height: 650,
                 child: new GridView.count(
                   // Create a grid with 2 columns. If you change the scrollDirection to
                   // horizontal, this would produce 2 rows.
                   crossAxisCount: 3,
+                  // 左右间隔
+                  crossAxisSpacing: 10.0,
+                  // 上下间隔
+                  mainAxisSpacing: 10.0,
+                  //宽高比
+                  childAspectRatio: 2 / 3,
                   // Generate 100 Widgets that display their index in the List
-                  children: new List.generate(100, (index) {
-                    return new Center(
+                  children: new List.generate(9, (index) {
+                    return new Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xFF7a77bd),
+                          borderRadius: BorderRadius.all(Radius.circular(4.0))),
                       child: new Text(
                         'Item $index',
-                        style: Theme.of(context).textTheme.headline,
                       ),
                     );
                   }),

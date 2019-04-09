@@ -180,10 +180,7 @@ class InformationDetailPageState extends State<InformationDetailPage> {
                       child: new Row(
                         children: <Widget>[
                           new Text(
-                            '链接：' +
-                                information['infor_link']
-                                    .toString()
-                                    .substring(0, 30),
+                            '链接：' + information['infor_link'],
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: textStyle,
