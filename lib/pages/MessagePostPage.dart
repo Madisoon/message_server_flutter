@@ -3,6 +3,7 @@ import 'dart:convert';
 import './InformationDetailPage.dart';
 import '../utils/CommonOperation.dart';
 import '../utils/ApiUtils.dart';
+import '../api/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MessagePostPage extends StatefulWidget {
@@ -76,8 +77,7 @@ class MessagePostPageState extends State<MessagePostPage>
       emptyPageStatus = false;
     });
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    ApiUtils.get(
-            "http://114.115.253.92:8080/yuqingmanage/manage/getInforPostByGet")
+    ApiUtils.get(Api.baseUrl + "yuqingmanage/manage/getInforPostByGet")
         .then((data) {
       if (data != null) {
         // 将接口返回的json字符串解析为map类型
@@ -172,7 +172,7 @@ class MessagePostPageState extends State<MessagePostPage>
                   map['infor_context'].toString().trim(),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: Colors.grey, height: 1.4),
                 ),
                 alignment: FractionalOffset.centerLeft,
               ),
@@ -190,10 +190,10 @@ class MessagePostPageState extends State<MessagePostPage>
           new Text(DateTime.now().toString().substring(0, 16))
         ],
       ),
-      trailing: IconButton(
+      /*trailing: IconButton(
         icon: Icon(Icons.playlist_play),
         onPressed: getNumber,
-      ),
+      ),*/
       onTap: () {
         /// 跳转到信息详情页面
         Navigator.push<String>(context,

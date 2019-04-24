@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../constants/CommonConstant.dart';
 import '../utils/ApiUtils.dart';
+import '../api/api.dart';
 import './TagShowPage.dart';
 
 /// 登陆页面
@@ -64,8 +65,7 @@ class MonitorInformationDetailPageState
   /// 获取我的标签
   getMyTag() {
     Map<String, String> map = {'userLoginName': 'admin'};
-    ApiUtils.post("http://114.115.253.92:8080/yuqingmanage/manage/getMyTag",
-            params: map)
+    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/getMyTag", params: map)
         .then((data) {
       Map<String, dynamic> map = json.decode(data);
       setState(() {
@@ -77,8 +77,7 @@ class MonitorInformationDetailPageState
   /// 回收信息，删除按钮操作
   trashPostInformation(BuildContext context) {
     Map<String, String> map = {'id': widget.information['id'], 'isDelete': '1'};
-    ApiUtils.post(
-            "http://114.115.253.92:8080/yuqingmanage/manage/inforLogicOperation",
+    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/inforLogicOperation",
             params: map)
         .then((data) {
       Map map = {'id': widget.information['id'], 'type': 'trash'};
@@ -103,8 +102,7 @@ class MonitorInformationDetailPageState
       'infoTagId': widget.information['tag_ids'],
       'infoData': json.encode(updateData).toString(),
     };
-    ApiUtils.post(
-            "http://114.115.253.92:8080/yuqingmanage/manage/updateInfoData",
+    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/updateInfoData",
             params: map)
         .then((data) {
       Map map = {'id': widget.information['id'], 'type': 'sure'};

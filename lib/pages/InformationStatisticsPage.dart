@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import '../utils/ApiUtils.dart';
+import '../api/api.dart';
 import 'dart:convert';
 
 /// 信息统计页面
@@ -21,8 +22,7 @@ class InformationStatisticsPageState extends State<InformationStatisticsPage> {
   }
 
   List<charts.Series<OrdinalSales, String>> _createSampleData() {
-    ApiUtils.get("http://114.115.253.92:8080/yuqingmanage/manage/getTodayRank")
-        .then((data) {
+    ApiUtils.get(Api.baseUrl + "yuqingmanage/manage/getTodayRank").then((data) {
       if (data != null) {
         // 将接口返回的json字符串解析为map类型
         Map<String, dynamic> map = json.decode(data);

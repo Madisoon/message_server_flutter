@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import '../utils/ApiUtils.dart';
+import '../api/api.dart';
 
 @immutable
 class TagManage extends StatefulWidget {
@@ -97,8 +98,7 @@ class TagManageState extends State<TagManage> {
 
   /// 获取所有标签
   getAllTag() {
-    ApiUtils.post("http://114.115.253.92:8080/yuqingmanage/manage/getAllTag")
-        .then((data) {
+    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/getAllTag").then((data) {
       var totalPosition = 0.0;
       setState(() {
         Map<String, dynamic> map = json.decode(data);

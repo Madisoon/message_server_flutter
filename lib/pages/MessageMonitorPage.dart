@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import './MonitorInformationDetailPage.dart';
 import '../utils/ApiUtils.dart';
+import '../api/api.dart';
 
 class MessageMonitorPage extends StatefulWidget {
   MessageMonitorPage({Key key, this.title}) : super(key: key);
@@ -33,8 +34,8 @@ class MessageMonitorPageState extends State<MessageMonitorPage>
 
   /// 需要监控的信息
   getMonitorInformation() {
-    ApiUtils.get(
-            "http://114.115.253.92:8080/yuqingmanage/manage/getMonitorInformation?pageNumber=1&pageSize=50")
+    ApiUtils.get(Api.baseUrl +
+            "yuqingmanage/manage/getMonitorInformation?pageNumber=1&pageSize=50")
         .then((data) {
       if (data != null) {
         // 将接口返回的json字符串解析为map类型
@@ -75,15 +76,14 @@ class MessageMonitorPageState extends State<MessageMonitorPage>
                   map['infor_context'].toString().trim(),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: Colors.grey, height: 1.4),
                 ),
                 alignment: FractionalOffset.centerLeft,
               ),
             )
           ],
         ),
-        onHorizontalDragEnd: (endDetails) {
-        },
+        onHorizontalDragEnd: (endDetails) {},
       ),
       /*new Text(DateTime.now().toString())*/
       subtitle: new Row(
@@ -106,7 +106,10 @@ class MessageMonitorPageState extends State<MessageMonitorPage>
           if (map != null && map['id'] != null && map['id'] != '') {
             if (map['type'] == 'trash') {
               Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('回收成功', style: TextStyle(color: Colors.white),),
+                content: Text(
+                  '回收成功',
+                  style: TextStyle(color: Colors.white),
+                ),
                 backgroundColor: Color(0xFF7a77bd),
               ));
             }

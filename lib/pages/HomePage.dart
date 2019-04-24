@@ -79,6 +79,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
+                    margin: EdgeInsets.only(bottom: 5),
                     child: Icon(mainMenu[index]['icon'],
                         size: 22,
                         color: mainMenu[index]['activeStatus']

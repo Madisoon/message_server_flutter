@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../utils/CommonOperation.dart';
 import '../utils/ApiUtils.dart';
 
+import '../api/api.dart';
+
 /// 推送消息详情页面
 class InformationDetailPage extends StatefulWidget {
   InformationDetailPage({Key key, this.information}) : super(key: key);
@@ -50,8 +52,7 @@ class InformationDetailPageState extends State<InformationDetailPage> {
   /// 删除需要推送的信息
   deletePostInformation(BuildContext context, String id) {
     Map<String, String> map = {'inforId': id};
-    ApiUtils.post(
-            "http://114.115.253.92:8080/yuqingmanage/manage/deleteInforPost",
+    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/deleteInforPost",
             params: map)
         .then((data) {
       Navigator.pop(context, id);
@@ -146,7 +147,7 @@ class InformationDetailPageState extends State<InformationDetailPage> {
                       alignment: FractionalOffset.centerLeft,
                     ),
                     new Container(
-                      margin: EdgeInsets.only(top: 4, bottom: 4.0),
+                      margin: EdgeInsets.only(top: 8, bottom: 4.0),
                       child: new Row(
                         children: <Widget>[
                           new Expanded(
@@ -188,7 +189,10 @@ class InformationDetailPageState extends State<InformationDetailPage> {
                         ],
                       ),
                     ),
-                    new Text(information['infor_context'].toString().trim()),
+                    new Text(
+                      information['infor_context'].toString().trim(),
+                      style: TextStyle(height: 1.4),
+                    ),
                   ],
                 ),
               )

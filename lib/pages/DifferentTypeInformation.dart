@@ -5,6 +5,7 @@ import 'dart:convert';
 import '../utils/ApiUtils.dart';
 import '../utils/InformationDataSource.dart';
 import '../entity/SysInformation.dart';
+import '../api/api.dart';
 
 class DifferentTypeInformation extends StatefulWidget {
   DifferentTypeInformation({Key key}) : super(key: key);
@@ -50,8 +51,7 @@ class DifferentTypeInformationState extends State<DifferentTypeInformation> {
       'pageNumber': '1',
       'pageSize': '500',
     };
-    ApiUtils.post(
-            "http://114.115.253.92:8080/yuqingmanage/manage/listInformation",
+    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/listInformation",
             params: params)
         .then((data) {
       if (data != null) {

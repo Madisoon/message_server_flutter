@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import './HomePage.dart';
 import '../utils/ApiUtils.dart';
+import '../api/api.dart';
 import '../utils/CommonDataUtils.dart';
 
 /// 登陆页面
@@ -26,8 +27,7 @@ class LoginPageState extends State<LoginPage> {
     Map<String, String> map = {};
     map['user_loginname'] = userAccount;
     map['user_password'] = userPassword;
-    ApiUtils.post(
-            "http://114.115.253.92:8080/yuqingmanage/manage/getUserAllInfo",
+    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/getUserAllInfo",
             params: map)
         .then((rep) {
       Map<String, dynamic> data = json.decode(rep);
