@@ -117,8 +117,7 @@ class MessagePostPageState extends State<MessagePostPage>
   /// 完成推送的信息
   finishPostInformation(BuildContext context, String id, int index) {
     Map<String, String> map = {'inforId': id, 'userLoginName': 'admin'};
-    ApiUtils.post(
-            "http://114.115.253.92:8080/yuqingmanage/manage/updateInforPost",
+    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/updateInforPost",
             params: map)
         .then((data) {
       setState(() {
@@ -150,6 +149,7 @@ class MessagePostPageState extends State<MessagePostPage>
 
   Widget buildListData(BuildContext context, Map map, Icon iconItem) {
     /// list中的单个人元素的样式
+    print(map);
     return new ListTile(
       isThreeLine: false,
       /*leading: iconItem,GestureDetector,手势相关*/
@@ -187,7 +187,7 @@ class MessagePostPageState extends State<MessagePostPage>
           new Expanded(
               child: new Text(
                   CommonOperation.getInformationType(map['infor_post_type']))),
-          new Text(DateTime.now().toString().substring(0, 16))
+          new Text(map['infor_site'])
         ],
       ),
       /*trailing: IconButton(

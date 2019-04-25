@@ -321,7 +321,7 @@ class TagManageState extends State<TagManage> {
           iconTheme: new IconThemeData(color: Colors.white),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.add, color: Colors.white),
+              icon: Icon(Icons.add),
               tooltip: '添加',
               onPressed: () {
                 return showDialog<void>(

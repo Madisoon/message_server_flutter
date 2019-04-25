@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './MessagePostPage.dart';
+import './scheduled_tasks.dart';
 import './MessageMonitorPage.dart';
 import './tag_manage.dart';
 import './SystemNoticePage.dart';
@@ -86,11 +86,11 @@ class SystemConfigurationPageState extends State<SystemConfigurationPage> {
       'name': '推送设置',
       'data': [
         {
-          'name': '推送管理',
+          'name': '推送计划',
           'subtitle': '二级标题',
           'color': Color(0xFF5ac7ae),
           'icon': Icons.threesixty,
-          'route': new SystemConfigurationPage()
+          'route': new ScheduledTasks()
         },
         {
           'name': '客户',

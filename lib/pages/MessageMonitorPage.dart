@@ -55,6 +55,8 @@ class MessageMonitorPageState extends State<MessageMonitorPage>
 
   Widget buildListData(BuildContext context, Map map, Icon iconItem) {
     /// list中的单个人元素的样式
+
+    print(map);
     return new ListTile(
       isThreeLine: false,
       title: new GestureDetector(
@@ -85,17 +87,16 @@ class MessageMonitorPageState extends State<MessageMonitorPage>
         ),
         onHorizontalDragEnd: (endDetails) {},
       ),
-      /*new Text(DateTime.now().toString())*/
       subtitle: new Row(
         children: <Widget>[
           new Expanded(child: new Text(map['infor_site'].toString().trim())),
-          new Text(DateTime.now().toString().substring(0, 16))
+          new Text(map['infor_createtime'].toString().substring(0, 16))
         ],
       ),
-      trailing: IconButton(
+      /*trailing: IconButton(
         icon: Icon(Icons.playlist_play),
         onPressed: () {},
-      ),
+      ),*/
       onTap: () {
         /// 跳转到监控详情页面
         Navigator.push<Map>(context,
