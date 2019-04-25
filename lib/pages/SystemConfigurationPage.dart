@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './scheduled_tasks.dart';
+import './customer_management.dart';
 import './MessageMonitorPage.dart';
 import './tag_manage.dart';
 import './SystemNoticePage.dart';
@@ -97,14 +98,14 @@ class SystemConfigurationPageState extends State<SystemConfigurationPage> {
           'subtitle': '二级标题',
           'color': Color(0xFFee6b2d),
           'icon': Icons.threesixty,
-          'route': new SystemConfigurationPage()
+          'route': new CustomerManagement()
         },
         {
           'name': '方案',
           'subtitle': '二级标题',
           'color': Color(0xFF5fc2ed),
           'icon': Icons.threesixty,
-          'route': new SystemConfigurationPage()
+          'route': new CustomerManagement()
         },
         {
           'name': '公告',

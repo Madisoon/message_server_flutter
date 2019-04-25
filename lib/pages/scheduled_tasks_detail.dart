@@ -58,6 +58,9 @@ class ScheduledTasksDetailState extends State<ScheduledTasksDetail> {
     });
   }
 
+  /// 修改计划任务
+  updatePlan() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,86 +81,95 @@ class ScheduledTasksDetailState extends State<ScheduledTasksDetail> {
               controller: remarkController,
             ),
             Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    '时间段',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 32.0,
-                            decoration: new BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: <BoxShadow>[
-                                  new BoxShadow(
-                                    color: Color(0xfff1f1f1), //阴影颜色
-                                    blurRadius: 10.0, //阴影大小
-                                  ),
-                                ],
-                                borderRadius: new BorderRadius.circular(32.0)),
-                            child: new TextField(
-                              controller: startController,
-                              textAlign: TextAlign.center,
-                              onTap: () {
-                                this._showTimePicker('start');
-                              },
-                              onChanged: (String value) {},
-                              decoration: InputDecoration.collapsed(
-                                  hintText: '开始时间',
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey.shade300,
-                                      fontSize: 14)),
-                            ),
+              margin: EdgeInsets.only(top: 15, bottom: 10),
+              child: Text(
+                '时间段',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 32.0,
+                    decoration: new BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: <BoxShadow>[
+                          new BoxShadow(
+                            color: Color(0xfff1f1f1), //阴影颜色
+                            blurRadius: 10.0, //阴影大小
                           ),
-                          flex: 1,
-                        ),
-                        Container(
-                          child: Text('至'),
-                          margin: EdgeInsets.only(left: 10, right: 10),
-                        ),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 18),
-                            alignment: Alignment.center,
-                            height: 32.0,
-                            decoration: new BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: <BoxShadow>[
-                                  new BoxShadow(
-                                    color: Color(0xfff1f1f1), //阴影颜色
-                                    blurRadius: 10.0, //阴影大小
-                                  ),
-                                ],
-                                borderRadius: new BorderRadius.circular(32.0)),
-                            child: new TextField(
-                              controller: endController,
-                              onTap: () {
-                                this._showTimePicker('end');
-                              },
-                              onChanged: (String value) {},
-                              decoration: InputDecoration.collapsed(
-                                  hintText: '结束时间',
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey.shade300,
-                                      fontSize: 14)),
-                            ),
-                          ),
-                          flex: 1,
-                        ),
-                      ],
+                        ],
+                        borderRadius: new BorderRadius.circular(32.0)),
+                    child: new TextField(
+                      controller: startController,
+                      textAlign: TextAlign.center,
+                      onTap: () {
+                        this._showTimePicker('start');
+                      },
+                      onChanged: (String value) {},
+                      decoration: InputDecoration.collapsed(
+                          hintText: '开始时间',
+                          hintStyle: TextStyle(
+                              color: Colors.grey.shade300, fontSize: 14)),
                     ),
                   ),
-                ],
+                  flex: 1,
+                ),
+                Container(
+                  child: Text('至'),
+                  margin: EdgeInsets.only(left: 10, right: 10),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 18),
+                    alignment: Alignment.center,
+                    height: 32.0,
+                    decoration: new BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: <BoxShadow>[
+                          new BoxShadow(
+                            color: Color(0xfff1f1f1), //阴影颜色
+                            blurRadius: 10.0, //阴影大小
+                          ),
+                        ],
+                        borderRadius: new BorderRadius.circular(32.0)),
+                    child: new TextField(
+                      controller: endController,
+                      onTap: () {
+                        this._showTimePicker('end');
+                      },
+                      onChanged: (String value) {},
+                      decoration: InputDecoration.collapsed(
+                          hintText: '结束时间',
+                          hintStyle: TextStyle(
+                              color: Colors.grey.shade300, fontSize: 14)),
+                    ),
+                  ),
+                  flex: 1,
+                ),
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 15),
+              child: Text(
+                '应用时间',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               ),
-            )
+            ),
+            new Wrap(
+              spacing: 10.0, // gap between adjacent chips
+              children: List.generate(7, (index) {
+                return new GestureDetector(
+                  onTap: () {},
+                  child: Chip(
+                      label: Text('星期${index + 1}',
+                          style: TextStyle(color: Colors.white)),
+                      backgroundColor: Color(0xFF7a77bd)),
+                );
+              }),
+            ),
           ],
         ),
       ),
