@@ -4,8 +4,8 @@ import './InformationDetailPage.dart';
 import '../utils/CommonOperation.dart';
 import '../utils/ApiUtils.dart';
 import '../api/api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+/// 信息展示
 class MessagePostPage extends StatefulWidget {
   MessagePostPage({Key key, this.title}) : super(key: key);
 
@@ -76,7 +76,6 @@ class MessagePostPageState extends State<MessagePostPage>
       curPage = 1;
       emptyPageStatus = false;
     });
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     ApiUtils.get(Api.baseUrl + "yuqingmanage/manage/getInforPostByGet")
         .then((data) {
       if (data != null) {
@@ -86,6 +85,10 @@ class MessagePostPageState extends State<MessagePostPage>
         /// 三种情况  有数据，还有下一页
         /// 有数据，没有下一页
         /// 没有数据
+        setState(() {
+          listData = map['data'];
+        });
+
         if (listData == null || listData.length == 0) {
           setState(() {
             loadingStatus = true;
@@ -100,9 +103,6 @@ class MessagePostPageState extends State<MessagePostPage>
             loadingStatus = false;
           });
         }
-        setState(() {
-          listData = map['data'];
-        });
       }
     });
   }

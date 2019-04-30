@@ -19,10 +19,10 @@ class ScheduledTasksDetailState extends State<ScheduledTasksDetail> {
   /// 内容输入控制器
   TextEditingController remarkController;
 
-  /// 标题输入控制器
+  /// 开始时间控制器
   TextEditingController startController;
 
-  /// 内容输入控制器
+  ///结束时间控制器
   TextEditingController endController;
 
   String startTime;

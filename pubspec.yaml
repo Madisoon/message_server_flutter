@@ -46,14 +46,17 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-  - lib/images/turn_on_images.jpg
-  - lib/images/header.jpg
-  - lib/images/login_background.png
-  - lib/images/login_logo.png
-  - lib/images/qixi.jpeg
-  - lib/images/sun.flr
-  - lib/images/flash_screen.flr
-  - lib/images/person_back.png
+    - lib/images/turn_on_images.jpg
+    - lib/images/header.jpg
+    - lib/images/login_background.png
+    - lib/images/login_logo.png
+    - lib/images/qixi.jpeg
+    - lib/images/sun.flr
+    - lib/images/flash_screen.flr
+    - lib/images/person_back.png
+    - lib/images/contactType/phone.png
+    - lib/images/contactType/qq.png
+    - lib/images/contactType/weixin.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

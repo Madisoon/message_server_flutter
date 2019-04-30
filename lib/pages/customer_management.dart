@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'dart:convert';
 import '../utils/ApiUtils.dart';
 
+import './customer_management_detail.dart';
+
+/// 客户管理
 class CustomerManagement extends StatefulWidget {
   CustomerManagement({Key key}) : super(key: key);
 
@@ -11,12 +13,34 @@ class CustomerManagement extends StatefulWidget {
 }
 
 class CustomerManagementState extends State<CustomerManagement> {
+  /// 搜索框状态
   bool searchToolStatus = false;
+
+  /// 数据
   List customerData = [];
 
+  /// 第几页
   num pageNumber = 1;
+
+  /// 每页条数
   num pageSize = 25;
-  String status = '';
+
+  /// 是否已经获取全部数据
+  bool loadingStatus = false;
+
+  /// 是否展示没有数据时的空白页面
+  bool emptyPageStatus = false;
+
+  /// 定义滚动控制变量
+  ScrollController _scrollController = new ScrollController();
+
+  // 防止下拉过程不断的请求
+  bool isPerformingRequest = false;
+
+  /// 搜索的状态条件
+  String status = '1';
+
+  /// 搜索关键词条件
   String keyWords = '';
 
   TextEditingController keyWordController = new TextEditingController();
@@ -24,10 +48,29 @@ class CustomerManagementState extends State<CustomerManagement> {
   @override
   void initState() {
     super.initState();
-    this.listCustomer();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        this.listMoreCustomer();
+      }
+    });
+    this.listCustomer(true);
   }
 
-  listCustomer() {
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  /// clearType=>判断是整
+  listCustomer(clearType) {
+    if (clearType) {
+      this.pageNumber = 1;
+    } else {
+      this.pageNumber++;
+    }
+    print(this.pageNumber);
     Map<String, String> params = {
       'pageSize': this.pageSize.toString(),
       'pageNumber': this.pageNumber.toString(),
@@ -36,14 +79,36 @@ class CustomerManagementState extends State<CustomerManagement> {
     };
     ApiUtils.get("http://localhost:8088/manage/listAllCustomer", params: params)
         .then((data) {
-      print(data);
       if (data != null) {
         Map<String, dynamic> map = json.decode(data);
         setState(() {
-          this.customerData = map['data'];
+          if (clearType) {
+            this.customerData = map['data'];
+          } else {
+            this.customerData.addAll(map['data']);
+          }
         });
+        if (map['data'] == null || map['data'].length == 0) {
+          setState(() {
+            loadingStatus = true;
+            emptyPageStatus = true;
+          });
+        } else if (map['data'].length < this.pageSize) {
+          setState(() {
+            loadingStatus = true;
+          });
+        } else {
+          setState(() {
+            loadingStatus = false;
+          });
+        }
       }
     });
+  }
+
+  /// 加载更多，加一页
+  listMoreCustomer() {
+    this.listCustomer(false);
   }
 
   searchToolShowOrHide() {
@@ -89,7 +154,7 @@ class CustomerManagementState extends State<CustomerManagement> {
                   ),
                   onPressed: () {
                     this.keyWords = keyWordController.text;
-                    this.listCustomer();
+                    this.listCustomer(true);
                   },
                 )
               ],
@@ -103,11 +168,12 @@ class CustomerManagementState extends State<CustomerManagement> {
 
   Future<Null> handleRefresh() async {
     // 延迟一秒加载
-    this.pageNumber = 1;
     await Future.delayed(Duration(seconds: 1), () {
-      this.listCustomer();
+      this.listCustomer(true);
     });
   }
+
+  pageSizeInitialization() {}
 
   List<Widget> renderCustomer() {
     List<Widget> list = [];
@@ -117,7 +183,15 @@ class CustomerManagementState extends State<CustomerManagement> {
           child: Container(
         padding: EdgeInsets.all(10),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.push<String>(context,
+                new MaterialPageRoute(builder: (BuildContext context) {
+              return new CustomerManagementDetail(
+                customerInformation: item,
+                pageType: 'update',
+              );
+            })).then((String id) {});
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -165,6 +239,7 @@ class CustomerManagementState extends State<CustomerManagement> {
         ),
       )));
     });
+    list.add(this._buildProgressIndicator());
     return list;
   }
 
@@ -176,7 +251,7 @@ class CustomerManagementState extends State<CustomerManagement> {
     List.generate(typeList.length, (index) {
       if (index == 0 || typeList[index] != typeList[index - 1]) {
         list.add(Divider());
-        list.add(Text('${typeList[index]}:',
+        list.add(Text('${this.typeJudge(typeList[index])}:',
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -189,15 +264,40 @@ class CustomerManagementState extends State<CustomerManagement> {
     return list;
   }
 
+  typeJudge(type) {
+    String typeName = '';
+    switch (type) {
+      case 'number':
+        typeName = '手机';
+        break;
+      case 'qq':
+        typeName = 'QQ';
+        break;
+      case 'qqGroup':
+        typeName = 'QQ群';
+        break;
+      case 'weixin':
+        typeName = '微信';
+        break;
+      case 'weixinGroup':
+        typeName = '微信群';
+        break;
+      default:
+        typeName = '未知';
+        break;
+    }
+    return typeName;
+  }
+
   // 加载更多 Widget
   Widget _buildProgressIndicator() {
     return new Padding(
       padding: const EdgeInsets.all(8.0),
       child: new Center(
           child: new Text(
-            true ? '已加载全部数据' : '努力加载中...',
-            style: TextStyle(color: Colors.grey),
-          )),
+        this.loadingStatus ? '已加载全部数据' : '努力加载中...',
+        style: TextStyle(color: Colors.grey),
+      )),
     );
   }
 
@@ -216,10 +316,34 @@ class CustomerManagementState extends State<CustomerManagement> {
               });
             },
           ),
+          IconButton(
+            icon: Icon(Icons.add),
+            tooltip: '添加',
+            onPressed: () {
+              var customerObject = {
+                'customer_end_time': '',
+                'customer_name': '',
+                'customer_priority': '',
+                'customer_scheme': '',
+                'customer_start_time': '',
+                'get_numbers': '',
+                'get_remarks': '',
+                'get_types': '',
+                'scheme_name': '',
+              };
+              Navigator.push<String>(context,
+                  new MaterialPageRoute(builder: (BuildContext context) {
+                return new CustomerManagementDetail(
+                  customerInformation: customerObject,
+                  pageType: 'insert',
+                );
+              })).then((String id) {});
+            },
+          ),
           PopupMenuButton<String>(
             onSelected: (String result) {
               this.status = result;
-              this.listCustomer();
+              this.listCustomer(true);
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                   const PopupMenuItem<String>(
@@ -242,6 +366,8 @@ class CustomerManagementState extends State<CustomerManagement> {
         child: Container(
           child: ListView(
             children: this.renderCustomer(),
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _scrollController,
           ),
         ),
         color: Color(0xFF7a77bd),
