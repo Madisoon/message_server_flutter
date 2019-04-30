@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:message_server_flutter/api/api.dart';
 import 'dart:convert';
 
 import '../utils/ApiUtils.dart';
+import '../utils/CommonOperation.dart';
 import 'add_contact_information.dart';
 import 'select_program.dart';
 // 可能需要走两套逻辑，添加逻辑和修改逻辑
@@ -33,17 +35,12 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
   /// 内容输入控制器
   TextEditingController remarkController;
 
-  /// 开始时间控制器
-  TextEditingController startController = new TextEditingController();
-
-  ///结束时间控制器
-  TextEditingController endController = new TextEditingController();
+  String startTime = '';
+  String endTime = '';
 
   @override
   void initState() {
     super.initState();
-    startController.text = widget.customerInformation['customer_start_time'];
-    endController.text = widget.customerInformation['customer_end_time'];
     List<Map> data = [];
     titleController.text = widget.customerInformation['customer_name'];
     List typeList = widget.customerInformation['get_types'].toString() != ''
@@ -79,9 +76,9 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
         .then((value) {
       setState(() {
         if (type == 'start') {
-          startController.text = value.toString().substring(0, 10);
+          startTime = value.toString().substring(0, 10);
         } else {
-          endController.text = value.toString().substring(0, 10);
+          endTime = value.toString().substring(0, 10);
         }
       });
     });
@@ -91,8 +88,8 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
   saveCustomerData() {
     Map customerData = {
       'customer_name': widget.customerInformation['customer_name'],
-      'customer_start_time': startController.text,
-      'customer_end_time': endController.text,
+      'customer_start_time': this.startTime,
+      'customer_end_time': this.endTime,
       'customer_priority': widget.customerInformation['customer_priority'],
       'customer_scheme': widget.customerInformation['customer_scheme'],
     };
@@ -104,14 +101,16 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
         "get_type": item['type']
       });
     });
+
     Map<String, String> params = {
       'customerData': jsonEncode(customerData),
       'getData': jsonEncode(list),
     };
+
     if (widget.pageType == 'update') {
       /// 修改
       params['serveCustomerId'] = widget.customerInformation['id'];
-      ApiUtils.post("http://localhost:8088/manage/updateServeCustomer",
+      ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/updateServeCustomer",
               params: params)
           .then((data) {
         if (data != null) {
@@ -121,8 +120,8 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
       });
     } else {
       /// 插入
-      params['areaId'] = '562';
-      ApiUtils.post("http://localhost:8088/manage/insertServeCustomer",
+      params['areaId'] = '29';
+      ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/insertServeCustomer",
               params: params)
           .then((data) {
         if (data != null) {
@@ -146,7 +145,10 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
           });
         },
       ));
-      list.add(new Text("${index + 1}级"));
+      list.add(new Text(
+        "${index + 1}级",
+        style: TextStyle(color: Colors.grey),
+      ));
     });
     return list;
   }
@@ -158,7 +160,9 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
     this.contactData.forEach((item) {
       list.add(ListTile(
           leading: CircleAvatar(
-            backgroundImage: new AssetImage("lib/images/contactType/qq.png"),
+            backgroundColor: Colors.white,
+            backgroundImage:
+                new AssetImage(CommonOperation.typeJudge(item['type'])['icon']),
           ),
           title: Text('${item['number']}'),
           subtitle: Text('${item['remark']}'),
@@ -171,8 +175,7 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
               });
             },
             child: Icon(Icons.clear),
-          ),
-          onTap: () {}));
+          )));
     });
     return list;
   }
@@ -218,29 +221,27 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 32.0,
-                    decoration: new BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: <BoxShadow>[
-                          new BoxShadow(
-                            color: Color(0xfff1f1f1), //阴影颜色
-                            blurRadius: 10.0, //阴影大小
-                          ),
-                        ],
-                        borderRadius: new BorderRadius.circular(32.0)),
-                    child: new TextField(
-                      controller: startController,
-                      textAlign: TextAlign.center,
-                      onTap: () {
-                        this._showDatePicker('start');
-                      },
-                      decoration: InputDecoration.collapsed(
-                          hintText: '开始日期',
-                          hintStyle: TextStyle(
-                              color: Colors.grey.shade300, fontSize: 14)),
+                  child: GestureDetector(
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 32.0,
+                      decoration: new BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: <BoxShadow>[
+                            new BoxShadow(
+                              color: Color(0xfff1f1f1), //阴影颜色
+                              blurRadius: 10.0, //阴影大小
+                            ),
+                          ],
+                          borderRadius: new BorderRadius.circular(32.0)),
+                      child: Text(
+                        this.startTime != '' ? this.startTime : '请选择',
+                        style: TextStyle(fontSize: 14),
+                      ),
                     ),
+                    onTap: () {
+                      this._showDatePicker('start');
+                    },
                   ),
                   flex: 1,
                 ),
@@ -249,30 +250,27 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
                   margin: EdgeInsets.only(left: 10, right: 10),
                 ),
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 18),
-                    alignment: Alignment.center,
-                    height: 32.0,
-                    decoration: new BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: <BoxShadow>[
-                          new BoxShadow(
-                            color: Color(0xfff1f1f1), //阴影颜色
-                            blurRadius: 10.0, //阴影大小
-                          ),
-                        ],
-                        borderRadius: new BorderRadius.circular(32.0)),
-                    child: new TextField(
-                      controller: endController,
-                      textAlign: TextAlign.center,
-                      onTap: () {
-                        this._showDatePicker('end');
-                      },
-                      decoration: InputDecoration.collapsed(
-                          hintText: '结束日期',
-                          hintStyle: TextStyle(
-                              color: Colors.grey.shade300, fontSize: 14)),
+                  child: GestureDetector(
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 32.0,
+                      decoration: new BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: <BoxShadow>[
+                            new BoxShadow(
+                              color: Color(0xfff1f1f1), //阴影颜色
+                              blurRadius: 10.0, //阴影大小
+                            ),
+                          ],
+                          borderRadius: new BorderRadius.circular(32.0)),
+                      child: Text(
+                        this.endTime != '' ? this.endTime : '请选择',
+                        style: TextStyle(fontSize: 14),
+                      ),
                     ),
+                    onTap: () {
+                      this._showDatePicker('end');
+                    },
                   ),
                   flex: 1,
                 ),

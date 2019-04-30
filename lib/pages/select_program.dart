@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 
 import '../utils/ApiUtils.dart';
+import '../api/api.dart';
 
 class SelectProgram extends StatefulWidget {
   SelectProgram({Key key}) : super(key: key);
@@ -21,7 +22,7 @@ class SelectProgramState extends State<SelectProgram> {
   }
 
   listScheme(keyWord) {
-    ApiUtils.get("http://localhost:8088/manage/getSchemeByKeyWord",
+    ApiUtils.get(Api.baseUrl + "yuqingmanage/manage/getSchemeByKeyWord",
         params: {'keyWord': keyWord}).then((data) {
       if (data != null) {
         Map<String, dynamic> map = json.decode(data);

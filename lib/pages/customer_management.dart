@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../utils/ApiUtils.dart';
-
+import '../utils/CommonOperation.dart';
+import '../api/api.dart';
 import './customer_management_detail.dart';
 
 /// 客户管理
@@ -70,14 +71,14 @@ class CustomerManagementState extends State<CustomerManagement> {
     } else {
       this.pageNumber++;
     }
-    print(this.pageNumber);
     Map<String, String> params = {
       'pageSize': this.pageSize.toString(),
       'pageNumber': this.pageNumber.toString(),
       'status': this.status,
       'keyWords': this.keyWords,
     };
-    ApiUtils.get("http://localhost:8088/manage/listAllCustomer", params: params)
+    ApiUtils.get(Api.baseUrl + "yuqingmanage/manage/listAllCustomer",
+            params: params)
         .then((data) {
       if (data != null) {
         Map<String, dynamic> map = json.decode(data);
@@ -190,7 +191,9 @@ class CustomerManagementState extends State<CustomerManagement> {
                 customerInformation: item,
                 pageType: 'update',
               );
-            })).then((String id) {});
+            })).then((String id) {
+              this.listCustomer(true);
+            });
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,42 +254,17 @@ class CustomerManagementState extends State<CustomerManagement> {
     List.generate(typeList.length, (index) {
       if (index == 0 || typeList[index] != typeList[index - 1]) {
         list.add(Divider());
-        list.add(Text('${this.typeJudge(typeList[index])}:',
+        list.add(Text('${CommonOperation.typeJudge(typeList[index])['name']}:',
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: Colors.blue)));
+                color: CommonOperation.typeJudge(typeList[index])['color'])));
         list.add(Text('${numberList[index]}(备注：${remarkList[index]})'));
       } else {
         list.add(Text('${numberList[index]}(备注：${remarkList[index]})'));
       }
     });
     return list;
-  }
-
-  typeJudge(type) {
-    String typeName = '';
-    switch (type) {
-      case 'number':
-        typeName = '手机';
-        break;
-      case 'qq':
-        typeName = 'QQ';
-        break;
-      case 'qqGroup':
-        typeName = 'QQ群';
-        break;
-      case 'weixin':
-        typeName = '微信';
-        break;
-      case 'weixinGroup':
-        typeName = '微信群';
-        break;
-      default:
-        typeName = '未知';
-        break;
-    }
-    return typeName;
   }
 
   // 加载更多 Widget
@@ -337,7 +315,9 @@ class CustomerManagementState extends State<CustomerManagement> {
                   customerInformation: customerObject,
                   pageType: 'insert',
                 );
-              })).then((String id) {});
+              })).then((String id) {
+                this.listCustomer(true);
+              });
             },
           ),
           PopupMenuButton<String>(

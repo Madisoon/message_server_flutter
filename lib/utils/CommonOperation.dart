@@ -16,6 +16,43 @@ class CommonOperation {
     SystemChrome.setSystemUIOverlayStyle(uiStyle);
   }
 
+  static Map typeJudge(type) {
+    Map contactType = {'name': '', 'color': '', 'icon': ''};
+    switch (type) {
+      case 'number':
+        contactType['name'] = '手机';
+        contactType['color'] = Colors.grey;
+        contactType['icon'] = 'lib/images/contactType/phone.png';
+        break;
+      case 'qq':
+        contactType['name'] = 'QQ';
+        contactType['color'] = Colors.blue;
+        contactType['icon'] = 'lib/images/contactType/qq.png';
+        break;
+      case 'qqGroup':
+        contactType['name'] = 'QQ群';
+        contactType['color'] = Colors.blue;
+        contactType['icon'] = 'lib/images/contactType/qq.png';
+        break;
+      case 'weixin':
+        contactType['name'] = '微信';
+        contactType['color'] = Colors.green;
+        contactType['icon'] = 'lib/images/contactType/weixin.png';
+        break;
+      case 'weixinGroup':
+        contactType['name'] = '微信群';
+        contactType['color'] = Colors.green;
+        contactType['icon'] = 'lib/images/contactType/weixin.png';
+        break;
+      default:
+        contactType['name'] = '未知';
+        contactType['color'] = Colors.red;
+        contactType['icon'] = 'lib/images/contactType/phone.png';
+        break;
+    }
+    return contactType;
+  }
+
   /// 获取信息发送的类型
   static String getInformationType(informationType) {
     String type = "";
