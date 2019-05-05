@@ -74,14 +74,14 @@ class CommonConstant {
   static final List<Map> mainMenu = [
     {
       'icon': Icons.settings_ethernet,
-      'name': '信息',
+      'name': '推送',
       'flex': 1,
       'color': Colors.white,
       'activeStatus': true
     },
     {
       'icon': Icons.monochrome_photos,
-      'name': '测试',
+      'name': '信息',
       'flex': 2,
       'color': Colors.white,
       'activeStatus': false

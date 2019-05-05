@@ -43,6 +43,8 @@ class CustomerManagementDetailState extends State<CustomerManagementDetail> {
     super.initState();
     List<Map> data = [];
     titleController.text = widget.customerInformation['customer_name'];
+    startTime = widget.customerInformation['customer_start_time'];
+    endTime = widget.customerInformation['customer_end_time'];
     List typeList = widget.customerInformation['get_types'].toString() != ''
         ? widget.customerInformation['get_types'].toString().split(',')
         : [];

@@ -68,6 +68,7 @@ class CustomerManagementState extends State<CustomerManagement> {
   listCustomer(clearType) {
     if (clearType) {
       this.pageNumber = 1;
+      this.loadingStatus = false;
     } else {
       this.pageNumber++;
     }
@@ -77,34 +78,37 @@ class CustomerManagementState extends State<CustomerManagement> {
       'status': this.status,
       'keyWords': this.keyWords,
     };
-    ApiUtils.get(Api.baseUrl + "yuqingmanage/manage/listAllCustomer",
-            params: params)
-        .then((data) {
-      if (data != null) {
-        Map<String, dynamic> map = json.decode(data);
-        setState(() {
-          if (clearType) {
-            this.customerData = map['data'];
+    if (!loadingStatus) {
+      ApiUtils.get(Api.baseUrl + "yuqingmanage/manage/listAllCustomer",
+              params: params)
+          .then((data) {
+        if (data != null) {
+          Map<String, dynamic> map = json.decode(data);
+          if (map['data'] == null || map['data'].length == 0) {
+            setState(() {
+              loadingStatus = true;
+              emptyPageStatus = true;
+              this.customerData = [];
+            });
           } else {
-            this.customerData.addAll(map['data']);
+            if (clearType) {
+              this.customerData = map['data'];
+            } else {
+              this.customerData.addAll(map['data']);
+            }
+            if (map['data'].length < this.pageSize) {
+              setState(() {
+                loadingStatus = true;
+              });
+            } else {
+              setState(() {
+                loadingStatus = false;
+              });
+            }
           }
-        });
-        if (map['data'] == null || map['data'].length == 0) {
-          setState(() {
-            loadingStatus = true;
-            emptyPageStatus = true;
-          });
-        } else if (map['data'].length < this.pageSize) {
-          setState(() {
-            loadingStatus = true;
-          });
-        } else {
-          setState(() {
-            loadingStatus = false;
-          });
         }
-      }
-    });
+      });
+    }
   }
 
   /// 加载更多，加一页
@@ -134,6 +138,10 @@ class CustomerManagementState extends State<CustomerManagement> {
                           Expanded(
                             child: new TextField(
                               controller: keyWordController,
+                              onSubmitted: (value) {
+                                this.keyWords = value;
+                                this.listCustomer(true);
+                              },
                               decoration: InputDecoration.collapsed(
                                   hintText: '输入关键词',
                                   hintStyle: TextStyle(
@@ -141,10 +149,17 @@ class CustomerManagementState extends State<CustomerManagement> {
                                       fontSize: 14)),
                             ),
                           ),
-                          Icon(
-                            Icons.clear,
-                            color: Colors.grey,
-                          )
+                          InkWell(
+                            onTap: () {
+                              this.keyWords = '';
+                              keyWordController.text = '';
+                              this.listCustomer(true);
+                            },
+                            child: Icon(
+                              Icons.clear,
+                              color: Colors.grey.shade400,
+                            ),
+                          ),
                         ],
                       )),
                 ),
@@ -174,11 +189,8 @@ class CustomerManagementState extends State<CustomerManagement> {
     });
   }
 
-  pageSizeInitialization() {}
-
   List<Widget> renderCustomer() {
     List<Widget> list = [];
-    list.add(this.searchToolShowOrHide());
     this.customerData.forEach((item) {
       list.add(Card(
           child: Container(
@@ -344,12 +356,18 @@ class CustomerManagementState extends State<CustomerManagement> {
       ),
       body: new RefreshIndicator(
         child: Container(
-          child: ListView(
-            children: this.renderCustomer(),
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: _scrollController,
-          ),
-        ),
+            child: Column(
+          children: <Widget>[
+            this.searchToolShowOrHide(),
+            Expanded(
+              child: ListView(
+                children: this.renderCustomer(),
+                physics: const AlwaysScrollableScrollPhysics(),
+                controller: _scrollController,
+              ),
+            ),
+          ],
+        )),
         color: Color(0xFF7a77bd),
         onRefresh: handleRefresh,
       ),

@@ -10,6 +10,7 @@ import './SystemConfigurationPage.dart';
 import './InformationStatisticsPage.dart';
 import '../utils/CommonDataUtils.dart';
 import '../utils/Dessert.dart';
+import './information_history.dart';
 import 'dart:ui';
 import 'dart:io';
 
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   var bodyHome;
   var pages = <Widget>[
     new InformationPage(),
-    new DataTableDemo(),
+    new InformationHistory(),
     new DataTableDemo(),
     new SystemConfigurationPage()
   ];

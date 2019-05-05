@@ -8,7 +8,7 @@ import './InformationStatisticsPage.dart';
 import '../utils/CommonDataUtils.dart';
 import './MessageMonitorPage.dart';
 import './MessagePostPage.dart';
-import './DifferentTypeInformation.dart';
+import './information_history.dart';
 
 class InformationPage extends StatefulWidget {
   InformationPage({Key key, this.title}) : super(key: key);
@@ -21,11 +21,7 @@ class InformationPage extends StatefulWidget {
 
 class InformationPageState extends State<InformationPage>
     with SingleTickerProviderStateMixin {
-  List tabs = [
-    "推送",
-    "监控",
-    "展示" /*, "历史", "回收站"*/
-  ];
+  List tabs = ["推送", "监控"];
 
   List<Map> listOperation = CommonConstant.listOperation;
 
@@ -170,7 +166,6 @@ class InformationPageState extends State<InformationPage>
             children: [
               MessagePostPage(),
               MessageMonitorPage(),
-              DifferentTypeInformation(),
             ],
           ),
         ));
