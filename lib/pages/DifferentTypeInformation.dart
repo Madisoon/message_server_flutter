@@ -94,7 +94,6 @@ class DifferentTypeInformationState extends State<DifferentTypeInformation> {
             },
             onPageChanged: (int value) {
               // 页数变化
-              print(value);
             },
             sortColumnIndex: _sortColumnIndex,
             sortAscending: _sortAscending,

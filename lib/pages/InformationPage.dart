@@ -8,7 +8,6 @@ import './InformationStatisticsPage.dart';
 import '../utils/CommonDataUtils.dart';
 import './MessageMonitorPage.dart';
 import './MessagePostPage.dart';
-import './information_history.dart';
 
 class InformationPage extends StatefulWidget {
   InformationPage({Key key, this.title}) : super(key: key);
@@ -137,7 +136,7 @@ class InformationPageState extends State<InformationPage>
   @override
   Widget build(BuildContext context) {
     return new DefaultTabController(
-        length: 5,
+        length: 2,
         child: Scaffold(
           // 这是中间内容
           appBar: AppBar(

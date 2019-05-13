@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import 'dart:convert';
+import '../utils/ApiUtils.dart';
+import '../api/api.dart';
 import './information_history_search.dart';
 
 /// 推送历史
@@ -13,12 +16,30 @@ class InformationHistory extends StatefulWidget {
 }
 
 class InformationHistoryState extends State<InformationHistory> {
-  List historyData = [
-    {'title': '1'},
-    {'title': '1'}
-  ];
+  List historyData = [];
 
+  /// 数据是否加载完
   bool loadingStatus = false;
+
+  /// 第几页
+  num pageNumber = 1;
+
+  /// 每页条数
+  num pageSize = 25;
+
+  /// 是否展示没有数据时的空白页面
+  bool emptyPageStatus = false;
+
+  // 防止下拉过程不断的请求
+  bool isPerformingRequest = false;
+
+  String startTime = '';
+  String endTime = '';
+  String keyWord = '';
+
+  String informationStatus = "0";
+
+  bool searchShowStatus = false;
 
   /// 定义滚动控制变量
   ScrollController _scrollController = new ScrollController();
@@ -26,6 +47,89 @@ class InformationHistoryState extends State<InformationHistory> {
   @override
   void initState() {
     super.initState();
+    this.listPushInformation(true);
+
+    /// 添加滚动监听事件
+    _scrollController.addListener(() {
+      /// 判断是否滚动到最底层
+      bool flag = _scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent;
+      if (flag) {
+        this.listMoreInformation();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  listMoreInformation() {
+    if (!isPerformingRequest && !loadingStatus) {
+      setState(() => isPerformingRequest = true);
+      this.listPushInformation(false);
+    }
+  }
+
+  clearSearch() {
+    setState(() {
+      this.searchShowStatus = false;
+    });
+    this.startTime = '';
+    this.endTime = '';
+    this.keyWord = '';
+  }
+
+  /// 判断是否需要清空赋值
+  listPushInformation(clearType) {
+    if (clearType) {
+      this.pageNumber = 1;
+    } else {
+      this.pageNumber++;
+    }
+
+    Map<String, String> param = {
+      'pageNumber': this.pageNumber.toString(),
+      'pageSize': this.pageSize.toString(),
+      'startTime': this.startTime,
+      'endTime': this.endTime,
+      'keyWord': this.keyWord,
+      'deleteStatus': this.informationStatus,
+    };
+
+    /// Api.baseUrl
+    ApiUtils.get(Api.baseUrl + "yuqingmanage/manage/listPushInformation",
+            params: param)
+        .then((data) {
+      if (data != null) {
+        // 将接口返回的json字符串解析为map类型
+        Map<String, dynamic> map = json.decode(data);
+        if (map['data'] == null || map['data'].length == 0) {
+          setState(() {
+            loadingStatus = true;
+            this.historyData = [];
+          });
+        } else {
+          if (clearType) {
+            this.historyData = map['data'];
+          } else {
+            this.historyData.addAll(map['data']);
+          }
+          if (map['data'].length < this.pageSize) {
+            setState(() {
+              loadingStatus = true;
+            });
+          } else {
+            setState(() {
+              loadingStatus = false;
+            });
+          }
+        }
+      }
+      setState(() => isPerformingRequest = false);
+    });
   }
 
   // 加载更多 Widget
@@ -42,7 +146,62 @@ class InformationHistoryState extends State<InformationHistory> {
 
   Future<Null> handleRefresh() async {
     // 延迟一秒加载
-    await Future.delayed(Duration(seconds: 1), () {});
+    await Future.delayed(Duration(seconds: 1), () {
+      this.clearSearch();
+      this.listPushInformation(true);
+    });
+  }
+
+  Widget searchToolShow() {
+    String searchExplain = '';
+    if (this.startTime != '' || this.endTime != '') {
+      if (this.startTime != '' && this.endTime == '') {
+        searchExplain = '时间：${this.startTime}之后';
+      } else if (this.startTime == '' && this.endTime != '') {
+        searchExplain = '时间：截止${this.endTime}';
+      } else {
+        searchExplain = '时间：${this.startTime} 至 ${this.endTime}';
+      }
+    }
+    if (this.keyWord != '') {
+      if (searchExplain != '') {
+        searchExplain += '  |  关键词：${this.keyWord}';
+      } else {
+        searchExplain += '关键词：${this.keyWord}';
+      }
+    }
+    return this.searchShowStatus
+        ? Container(
+            padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+            width: double.infinity,
+            color: Color(0xFF00c1d0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: new Text(
+                    searchExplain,
+                    maxLines: 1,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      this.searchShowStatus = false;
+                    });
+                    this.clearSearch();
+                    this.listPushInformation(true);
+                  },
+                  child: Icon(
+                    Icons.clear,
+                    size: 18,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          )
+        : Container();
   }
 
   /// 构建信息历史列表
@@ -58,8 +217,7 @@ class InformationHistoryState extends State<InformationHistory> {
           return new Container(
             child: new Column(
               children: <Widget>[
-                buildListData(context, historyData[index],
-                    Icon(Icons.star, color: Colors.green)),
+                buildListData(context, historyData[index]),
                 new Divider()
               ],
             ),
@@ -71,7 +229,7 @@ class InformationHistoryState extends State<InformationHistory> {
     );
   }
 
-  Widget buildListData(BuildContext context, Map map, Icon iconItem) {
+  Widget buildListData(BuildContext context, Map map) {
     /// list中的单个人元素的样式
     return new ListTile(
       isThreeLine: false,
@@ -81,8 +239,7 @@ class InformationHistoryState extends State<InformationHistory> {
           children: <Widget>[
             new Align(
               child: new Text(
-                '高密普法 法治微课堂 老板谎称公司实行不定时工作制',
-                /*map['infor_title'].toString().trim(),*/
+                map['infor_title'].toString().trim(),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(color: Colors.black),
@@ -93,10 +250,7 @@ class InformationHistoryState extends State<InformationHistory> {
               margin: EdgeInsets.only(top: 4, bottom: 4.0),
               child: new Align(
                 child: new Text(
-                  '旷世奇才 发表于 2019-5-5 0806 文化路，'
-                      '政府部门的路，好好弄弄，天天缝补丁干啥 '
-                      '风光不再了，政府都没人了还修啥路。白搭了',
-                  /*map['infor_context'].toString().trim(),*/
+                  map['infor_context'].toString().trim(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: Colors.grey, height: 1.4),
@@ -114,34 +268,31 @@ class InformationHistoryState extends State<InformationHistory> {
         children: <Widget>[
           new Wrap(
             spacing: 8.0,
-            children: List.generate(4, (index) {
-              return new GestureDetector(
-                onTap: () {},
-                child: Container(
-                  child: Chip(
-                    avatar:
-                        Icon(Icons.person_outline, color: Color(0xFF7a77bd)),
-                    label: Text('安徽宣传部'),
-                  ),
-                ),
-              );
-            }),
+            children: this.buildPostCustomer(map['infor_numbers']),
           ),
           new Row(
             children: <Widget>[
-              new Expanded(child: new Text('2019-04-25 19:18')),
-              new Text('35分钟')
-              /*new Text(map['infor_site'])*/
+              new Expanded(child: new Text(map['infor_createtime'])),
+              new Text(map['infor_site'])
             ],
           )
         ],
       ),
-      /*trailing: IconButton(
-        icon: Icon(Icons.playlist_play),
-        onPressed: getNumber,
-      ),*/
-      onTap: () {},
     );
+  }
+
+  List<Widget> buildPostCustomer(postCustomer) {
+    List list = postCustomer.toString().split(',');
+    List<Widget> customerView = [];
+    list.forEach((item) {
+      customerView.add(Container(
+        child: Chip(
+          avatar: Icon(Icons.person_outline, color: Color(0xFF00c1d0)),
+          label: Text(item),
+        ),
+      ));
+    });
+    return customerView;
   }
 
   @override
@@ -151,14 +302,17 @@ class InformationHistoryState extends State<InformationHistory> {
         title: new Text('信息管理'),
         actions: <Widget>[
           PopupMenuButton<String>(
-            onSelected: (String result) {},
+            onSelected: (String result) {
+              this.informationStatus = result;
+              this.listPushInformation(true);
+            },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                   const PopupMenuItem<String>(
-                    value: '1',
+                    value: '0',
                     child: Text('正常'),
                   ),
                   const PopupMenuItem<String>(
-                    value: '0',
+                    value: '1',
                     child: Text('回收站'),
                   ),
                 ],
@@ -172,10 +326,22 @@ class InformationHistoryState extends State<InformationHistory> {
             icon: Icon(Icons.search),
             tooltip: '筛选',
             onPressed: () {
-              Navigator.push<String>(context,
+              Navigator.push<Map>(context,
                   new MaterialPageRoute(builder: (BuildContext context) {
                 return new InformationHistorySearch();
-              })).then((String id) {});
+              })).then((Map data) {
+                if (data != null) {
+                  setState(() {
+                    this.startTime = data['startTime'];
+                    this.endTime = data['endTime'];
+                    this.keyWord = data['keyWord'];
+                  });
+                  setState(() {
+                    this.searchShowStatus = true;
+                  });
+                  this.listPushInformation(true);
+                }
+              });
             },
           ),
         ],
@@ -183,7 +349,7 @@ class InformationHistoryState extends State<InformationHistory> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(),
+          this.searchToolShow(),
           Expanded(
             child: new RefreshIndicator(
               child: buildMessageList(),

@@ -55,8 +55,6 @@ class MessageMonitorPageState extends State<MessageMonitorPage>
 
   Widget buildListData(BuildContext context, Map map, Icon iconItem) {
     /// list中的单个人元素的样式
-
-    print(map);
     return new ListTile(
       isThreeLine: false,
       title: new GestureDetector(
