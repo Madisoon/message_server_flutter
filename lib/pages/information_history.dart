@@ -318,11 +318,6 @@ class InformationHistoryState extends State<InformationHistory> {
                 ],
           ),
           IconButton(
-            icon: Icon(Icons.add),
-            tooltip: '添加',
-            onPressed: () {},
-          ),
-          IconButton(
             icon: Icon(Icons.search),
             tooltip: '筛选',
             onPressed: () {

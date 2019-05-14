@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../constants/CommonConstant.dart';
 import '../utils/ApiUtils.dart';
 import '../api/api.dart';
-import './TagShowPage.dart';
+import './tag_show_page.dart';
 
 /// 登陆页面
 class MonitorInformationDetailPage extends StatefulWidget {

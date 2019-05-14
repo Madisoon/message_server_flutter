@@ -18,11 +18,6 @@ class TagManage extends StatefulWidget {
 class TagManageState extends State<TagManage> {
   TextEditingController tagNameController;
 
-//  final String tagIndex = 'tagIndex';
-//  final String tagId = 'id';
-//  final String tagName = 'tagName';
-//  final String checkStatus = 'checkStatus';
-
   final String tagIndex = 'name_index';
   final String tagId = 'id';
   final String tagName = 'name';
@@ -30,34 +25,7 @@ class TagManageState extends State<TagManage> {
 
   ScrollController scrollController;
   var allTag = [];
-  var letter = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z'
-  ];
+  var letter = [];
   final Map letterPositionMap = {'A': 0};
 
   @override
@@ -65,7 +33,8 @@ class TagManageState extends State<TagManage> {
     super.initState();
     scrollController = new ScrollController();
     tagNameController =
-        new TextEditingController.fromValue(new TextEditingValue(text: ''));
+    new TextEditingController.fromValue(new TextEditingValue(text: ''));
+    this.listTagIndex();
     getAllTag();
   }
 
@@ -76,16 +45,15 @@ class TagManageState extends State<TagManage> {
   }
 
   listTagIndex() {
-    ApiUtils.get('http://localhost:5678/push-you-service/tag/listTagIndex')
-        .then((data) {
-      List list = json.decode(data);
+    ApiUtils.get(Api.baseUrl + 'yuqingmanage/manage/listTagIndex').then((data) {
+      Map<String, dynamic> map = json.decode(data);
+      List list = map['data'];
       var letterData = [];
       list.forEach((item) {
         letterData.add(item[tagIndex]);
       });
-
       setState(() {
-        letter = letterData;
+        this.letter = letterData;
       });
     });
   }
@@ -98,13 +66,18 @@ class TagManageState extends State<TagManage> {
 
   /// 获取所有标签
   getAllTag() {
-    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/getAllTag").then((data) {
+    Map<String, String> param = {
+      'keyWord': '',
+    };
+    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/getAllTag", params: param)
+        .then((data) {
       var totalPosition = 0.0;
       setState(() {
         Map<String, dynamic> map = json.decode(data);
         allTag = map['data'];
         allTag.sort(
-            (a, b) => a[tagIndex].toString().compareTo(b[tagIndex].toString()));
+                (a, b) =>
+                a[tagIndex].toString().compareTo(b[tagIndex].toString()));
         List.generate(allTag.length, (index) {
           bool groupTitleStatus = true;
           if (index >= 1 &&
@@ -164,21 +137,23 @@ class TagManageState extends State<TagManage> {
             ),
             new Expanded(
                 child: new Container(
-              height: 45,
-              alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Theme.of(context).dividerColor,
-                    width: 1,
+                  height: 45,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Theme
+                            .of(context)
+                            .dividerColor,
+                        width: 1,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              child: new Text(
-                data[tagName],
-                style: TextStyle(fontSize: 15),
-              ),
-            ))
+                  child: new Text(
+                    data[tagName],
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ))
           ],
         ),
       ),
@@ -266,7 +241,7 @@ class TagManageState extends State<TagManage> {
   Widget build(BuildContext context) {
     final List<Widget> body = [
       new Container(
-        padding: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(top: 6),
         child: ListView(
           controller: scrollController,
           children: List.generate(allTag.length, (index) {
@@ -317,10 +292,10 @@ class TagManageState extends State<TagManage> {
     }
     return Scaffold(
         appBar: new AppBar(
-          title: new Text('选择标签'),
+          title: new Text('标签管理'),
           iconTheme: new IconThemeData(color: Colors.white),
           actions: <Widget>[
-            IconButton(
+          /*IconButton(
               icon: Icon(Icons.add),
               tooltip: '添加',
               onPressed: () {
@@ -367,7 +342,7 @@ class TagManageState extends State<TagManage> {
                   },
                 );
               },
-            ),
+            ),*/
           ],
         ),
         body: Stack(

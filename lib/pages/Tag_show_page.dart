@@ -36,34 +36,7 @@ class TagShowPageState extends State<TagShowPage> {
   var checkedTag = [];
 
   var allTag = [];
-  var letter = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z'
-  ];
+  var letter = [];
   final Map letterPositionMap = {'A': 0};
 
   @override
@@ -71,21 +44,22 @@ class TagShowPageState extends State<TagShowPage> {
     super.initState();
     scrollController = new ScrollController();
 
+    this.listTagIndex();
+
     /// 计算用于 IndexBar 进行定位的关键通讯录列表项的位置
     getAllTag();
   }
 
   listTagIndex() {
-    ApiUtils.get('http://localhost:5678/push-you-service/tag/listTagIndex')
-        .then((data) {
-      List list = json.decode(data);
+    ApiUtils.get(Api.baseUrl + 'yuqingmanage/manage/listTagIndex').then((data) {
+      Map<String, dynamic> map = json.decode(data);
+      List list = map['data'];
       var letterData = [];
       list.forEach((item) {
         letterData.add(item[tagIndex]);
       });
-
       setState(() {
-        letter = letterData;
+        this.letter = letterData;
       });
     });
   }
@@ -98,7 +72,9 @@ class TagShowPageState extends State<TagShowPage> {
 
   /// 获取所有标签
   getAllTag() {
-    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/getAllTag").then((data) {
+    Map<String, String> param = {'keyWord': ''};
+    ApiUtils.post(Api.baseUrl + "yuqingmanage/manage/getAllTag", params: param)
+        .then((data) {
       var totalPosition = 0.0;
       setState(() {
         Map<String, dynamic> map = json.decode(data);
@@ -291,6 +267,7 @@ class TagShowPageState extends State<TagShowPage> {
         });
       },
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: renderLetter(),
       ),
     );
@@ -300,7 +277,7 @@ class TagShowPageState extends State<TagShowPage> {
   Widget build(BuildContext context) {
     final List<Widget> body = [
       new Container(
-        padding: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(top: 6),
         child: ListView(
           controller: scrollController,
           children: List.generate(allTag.length, (index) {
@@ -314,10 +291,10 @@ class TagShowPageState extends State<TagShowPage> {
         ),
       ),
       new Positioned(
-        right: 5.0,
+        right: 8.0,
         top: 8.0,
         bottom: 40.0,
-        width: 16.0,
+        width: 20.0,
         child: new Container(
           padding: EdgeInsets.only(top: 10, bottom: 10),
           child: LayoutBuilder(builder: buildIndexBar),
